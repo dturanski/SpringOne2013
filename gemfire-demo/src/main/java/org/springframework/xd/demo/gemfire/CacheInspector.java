@@ -47,7 +47,7 @@ public class CacheInspector {
 		for (Object key: tweets.keySetOnServer()) {
 			PdxInstance entry = (PdxInstance)tweets.get(key);
 		}
-		new HashTagAnalyzer().analyzeHashTags(tweets.values(),"java");
+		new HashTagAnalyzer().aggregateAssociatedHashTags(tweets.values(),"java");
 	}
 
 	/**

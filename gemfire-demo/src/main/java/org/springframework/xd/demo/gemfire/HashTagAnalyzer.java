@@ -32,7 +32,7 @@ import com.gemstone.gemfire.pdx.PdxInstance;
 public class HashTagAnalyzer {
 	private boolean ignoreCase = true;
 
-	public Map<String, Integer> analyzeHashTags(Collection<Object> data, String targetHashTag) {
+	public Map<String, Integer> aggregateAssociatedHashTags(Collection<Object> data, String targetHashTag) {
 
 		FieldValueCounter hashTagCounts = new FieldValueCounter(targetHashTag + " Associated Hashtags");
 		ValueComparator vc = new ValueComparator(hashTagCounts.getFieldValueCount());
