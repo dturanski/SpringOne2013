@@ -1,0 +1,16 @@
+#! /bin/sh
+
+URL="http://localhost:8080"
+
+FILE=/Users/dturanski/s2build/springOne2013/gemfire-demo/data/tweets.out
+
+#Create main ingest stream
+curl -v -H "Accept: application/json" -d name=tweets -d definition="tail --name=$FILE --fromEnd=false+%7C+ log" "$URL/streams"
+curl -v -H "Accept: application/json" -X PUT -d deploy=false "$URL/streams/tweets"
+
+#Set up a gemfire tap
+curl -v -H "Accept: application/json" -d name=hashtags -d definition="tap@tweets+%7C+tweetToMap+%7C+gemfire-server --keyExpression=payload['id']" "$URL/taps"
+
+#curl -v -H "Accept: application/json" -d name=tweetlang -d definition="tap@tweets+%7C+field-value-counter --fieldName=lang" "$URL/taps"
+
+curl -v -H "Accept: application/json" -X PUT -d deploy=true "$URL/streams/tweets"

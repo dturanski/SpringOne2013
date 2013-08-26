@@ -10,38 +10,42 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.springframework.xd.demo.gemfire;
+package org.springframework.xd.demo.gemfire.function;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.springframework.data.gemfire.function.annotation.GemfireFunction;
+import org.springframework.data.gemfire.function.annotation.RegionData;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.xd.analytics.metrics.core.FieldValueCounter;
 
-import com.gemstone.gemfire.pdx.PdxInstance;
-
 /**
+ * Aggregates counts and sorts by descending count for associated hash tags present with a target hashTag
  * @author David Turanski
  *
  */
-public class HashTagAnalyzer {
+@Component
+public class HashTagAnalyzerFunction {
 	private boolean ignoreCase = true;
 
-	public Map<String, Integer> aggregateAssociatedHashTags(Collection<Object> data, String targetHashTag) {
-
+	@SuppressWarnings("unchecked")
+	@GemfireFunction(hasResult = true)
+	public Map<String, Integer> aggregateAssociatedHashTags(@RegionData Map<?, ?> data, String targetHashTag) {
 		FieldValueCounter hashTagCounts = new FieldValueCounter(targetHashTag + " Associated Hashtags");
 		ValueComparator vc = new ValueComparator(hashTagCounts.getFieldValueCount());
 		TreeMap<String, Integer> sorted = new TreeMap<String, Integer>(vc);
 
-		for (Iterator<Object> it =  data.iterator(); it.hasNext();) {
-			PdxInstance entry = (PdxInstance) it.next();
-			List<String> associatedHashTags = getAssociatedHashTags(entry,targetHashTag);
-			for (String hashTag: associatedHashTags) {
+		for (Object obj : data.values()) {
+			Map<String, Object> entry = (Map<String, Object>) obj;
+			List<String> associatedHashTags = getAssociatedHashTags(entry, targetHashTag);
+			for (String hashTag : associatedHashTags) {
 				if (ignoreCase) {
 					hashTag = hashTag.toLowerCase();
 				}
@@ -50,31 +54,29 @@ public class HashTagAnalyzer {
 					hashTagCounts.getFieldValueCount().put(hashTag, new Double(0));
 				}
 				count = hashTagCounts.getFieldValueCount().get(hashTag) + 1;
-				
+
 				hashTagCounts.getFieldValueCount().put(hashTag, count);
 			}
 		}
 
-		for (Entry<String, Double> count: hashTagCounts.getFieldValueCount().entrySet()) {
+		for (Entry<String, Double> count : hashTagCounts.getFieldValueCount().entrySet()) {
 			int i = count.getValue().intValue();
-			sorted.put(count.getKey(),i);
+			sorted.put(count.getKey(), i);
 		}
-		for (Entry<String, Integer> count: sorted.entrySet()) {
-			System.out.println(count.getKey() + "=" + count.getValue());
-		}
+
 		return sorted;
-		
+
 	}
 
-	private List<String> getAssociatedHashTags(PdxInstance entry, String targetHashTag) {
+	@SuppressWarnings("unchecked")
+	private List<String> getAssociatedHashTags(Map<String, Object> entry, String targetHashTag) {
 		List<String> results = new ArrayList<String>();
-		PdxInstance entities = (PdxInstance) entry.getField("entities");
-		List<PdxInstance> hashTags = (List<PdxInstance>) entities.getField("hashTags");
-		for (PdxInstance hashTag : hashTags) {
-
-			String text = (String) hashTag.getField("text");
-			if (!text.equalsIgnoreCase(targetHashTag)) {
-				results.add(text);
+		List<String> hashTags = (List<String>) entry.get("hashTags");
+		if (!CollectionUtils.isEmpty(hashTags)) {
+			for (String hashTag : hashTags) {
+				if (!hashTag.equalsIgnoreCase(targetHashTag)) {
+					results.add(hashTag);
+				}
 			}
 		}
 		return results;
@@ -87,7 +89,8 @@ public class HashTagAnalyzer {
 		this.ignoreCase = ignoreCase;
 	}
 
-	static class ValueComparator implements Comparator<String> {
+	@SuppressWarnings("serial")
+	static class ValueComparator implements Comparator<String>, Serializable {
 
 		Map<String, Double> base;
 
