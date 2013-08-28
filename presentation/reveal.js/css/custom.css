@@ -42,27 +42,3 @@ html.springxd blockquote {
 .reveal h2 { font-size: 1.50em;	color:rgba(30, 30, 30 , 0.6); }
 .reveal h3 { font-size: 1.25em;	}
 .reveal h4 { font-size: 1em;	}
-
-
-html.repositories body {
-	background:url("../img/repositories.png");
-	background-position:center;
-	background-size: 100%;
-}
-
-html.mapping body {
-	background:url("../img/mapping.png");
-	background-position:center;
-	background-size: 100%;
-}
-
-.reveal pre code {
-  font-size: 17pt;
-  line-height: 18pt;
-    height: auto;
-    width: 800px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}

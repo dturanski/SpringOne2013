@@ -49,14 +49,15 @@
 
 				<section>
 					<h1>Real Time Analytics</h1>
-					<p>
-						blah blah
-					</p>
+					<p align="left">What's happening right now?</p>
 					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
+						<li>Event driven</li>
+						<li>Notify humans or systems in real time</li>
+						<li>Simple counters and metrics</li>
+						<li>Aggregate Counters</li>
+						<li>Histograms</li>
+						<li>Advanced Metrics: Moving Average, Rates of Change</li>
+						<li>Complex Event Processing</li>
 					</ul>
 
 					<aside class="notes">
@@ -160,6 +161,79 @@
 					</li>
 					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
 					</ul>
+				</section>
+				<section>
+					<h1>Spring XD Metrics</h1>
+					<br/>
+					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
+					<ul>			
+						<li>Metrics commonly act as sinks for taps</li>
+					
+					<li>XD includes the following Metrics					
+						<ul>			
+							<li>Counter</li>
+							<li>Field Value Counter</li>
+							<li>Aggregate Counter</li>
+							<li>Gauge</li>
+							<li>Rich Guage</li>
+						</ul>
+					</li>
+					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
+					</ul>
+				</section>
+				<section>
+					<h1>What is GemFire?</h1>
+					<a align="left" href="
+					http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire">Pivotal GemFire</a>
+					<img src="img/gemfire.png" style="border:none;" height="75px"/>
+					<ul>
+						<li>A memory-oriented data grid that supports widely distributed architectures</li>
+					<li>High throughput, low latency, and scalability</li>
+					<li>Reliable event notification and guaranteed delivery</li>
+					<li>Continuous querying</li>
+					<li>Remote function execution</li>
+					<li>Language Interoperability: C++, C# and Java client applications</li>
+					<li>Supports various distributed system topologies</li>
+					<li>Full Spring support (Spring Data GemFire)</li>
+					<li>Well positioned for real time analytics</li>
+				</section>
+				<section>
+					<h1>GemFire Function Execution</h1>
+					<ul>
+						<li>Efficient way to process large data volumes "where the data lives"</li>
+						<li>Java code deployed to GemFire server nodes</li>
+						<li>The Function runs on local cache node and transports results over the network to the process that executed the function (Execution)</li>
+						<li>Function Execution aggregates results using a ResultCollector</li>
+					</ul>
+				</section>
+				<section>
+					<h1>GemFire Continuous Query</h1>
+					<ul>
+						<li>Good for asynchronous notification of data updates</li>
+						<li>Client subscribes to a data query and binds it to a QueryListener callback</li>
+						<li>GemFire invokes the QueryListener whenever the query's result set changes state</li>
+					</ul>
+				</section>
+				<section>
+					<h1>The Demo</h1>
+					<ul>
+						<p align="left">Perform real time analytics on the Twitter stream<p>
+						<li>Create a Twitter ingest stream with XD</li>
+						<li>Create taps on the Twitter stream to feed XD Metrics</li>
+						<li>Create a tap to pull selected data into GemFire for deeper analysis</li>
+						<li>The GemFire tap will demonstrate how to build and deploy a custom processor</li>
+						<li>Execute a GemFire Function to perform a complex analysis of hash tags</li>
+						<li>Use a custom Dashboard web application to view analytics</li>  
+					</ul>
+				</section>
+				<section>
+					<h1>Questions?</h1>
+					<img src="img/questions.png"/>
+				</section>
+				<section>
+					<h1>DIRT Runtime</h1>
+					
+					<img src="img/dirt-runtime.png" height="550"/>
 				</section>
 			</div>
 			<footer>
