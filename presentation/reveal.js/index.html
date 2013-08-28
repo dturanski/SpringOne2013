@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Real Time Analytics with Spring</title>
+
+		<meta name="description" content="SpringOne 2013 Presentation">
+		<meta name="author" content="David Turanski, Luke Taylor">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-state="springonetitle">
+					<img src="img/springonelogo.png" style="border:none;" width="250px"/>
+					<span style="position:relative; TOP:50px;">
+					<h1>Real Time Analytics With Spring</h1>
+					<h2>David Turanski</h2>
+					<h2>Luke Taylor</h2>
+					<span>
+					
+				</section>
+
+				<section>
+					<h1>Real Time Analytics</h1>
+					<p>
+						blah blah
+					</p>
+					<ul>
+						<li>No order here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+					</ul>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+				<section >
+					<h1>Spring XD Overview</h1>
+					<br/>
+				
+
+					<p align="left"> One stop shop for: </p>
+					<ul>
+						<li>Data Ingestion</li>
+						<li>Real-time Analytics</li>
+						<li>Workflow Orchestration</li>
+						<li>Data Export</li>
+						<li>Built on existing Spring Assets
+							<ul>
+								<small><li>Spring Integration, Batch, Data</li></small>
+							</ul>
+						</li>
+					</ul>
+				<img src="img/springxd1.png" align="right" valign="top"/>
+				 
+					<p align="left">XD='extreme data'</p>
+	
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+				<section>
+					<h1>Spring XD</h1>
+					<br/>
+					<ul>
+						<li>Open source Apache license</li>
+						<li>Out of the box executabe servers
+							<ul>
+								<small><li>not a bunch of jars</li></small>
+							</ul>
+						</li>
+						<li>Pluggable Module system</li>
+						<li>Configuration via High level DSL, CLI, and REST services<li>
+						<li>Simple model for distributing data processing instances</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD DSL</h1>
+					<br/>
+					<p>Based on Unix pipes and filters syntax</p>
+					<ul>
+						<li>http | file</li>
+						<li>http --port=8080 | file --rootDir=/data/</li>
+					<p>'http' and 'file' are <em>Module</em> names</p>
+
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD Streams</h1>
+					<br/>
+
+					<ul>
+						<li>A <em>Stream</em> is composed of <em>Modules</em></li>
+						<li>A Module is a Spring bean definition files built with Spring Integration or Spring Batch and exposes properties via property placeholders</li>
+						<li>Module types include: source, processor, sink, job, trigger</li>
+						<li>A Stream is defined using the DSL as <i>[source] | [p1] | ...| [pn] | [sink]</i> (where p1..pn is a chain of processors)</li>
+						<li>XD provides a number of modules out of the box. See <a href="https://github.com/springsource/spring-xd/wiki/Technical-Documentation">Spring XD Technical Documentation</a> for details.</li>
+						<li>You may install custom modules</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD Taps</h1>
+					<br/>
+					<p align="left">A <em>Tap</em> is a stream whose source is a point in an existing stream</p>
+					<ul>			
+						<li>Taps are primarily used for real time analysis</li>
+					
+					<li>Example:					
+						<ul>			
+							<li>twitter-search --query=Bieber | file</li>
+							<li>tap @ twitter-search | fieldvaluecounter --fields=hashtags</li>
+						</ul>
+					</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD Metrics</h1>
+					<br/>
+					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
+					<ul>			
+						<li>Metrics commonly act as sinks for taps</li>
+					
+					<li>XD includes the following Metrics					
+						<ul>			
+							<li>Counter</li>
+							<li>Field Value Counter</li>
+							<li>Aggregate Counter</li>
+							<li>Gauge</li>
+							<li>Rich Guage</li>
+						</ul>
+					</li>
+					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
+					</ul>
+				</section>
+			</div>
+			<footer>
+ 				<span>
+ 				&copy; 2013 SpringOne 2GX - Do not distribute without permission
+ 				<img src="img/springone.png" width="120px" align="right" style="padding-right:50px;"/>
+				</span>
+			</footer>
+		</div>
+		
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				width: 1600,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+		
+	</body>
+</html>

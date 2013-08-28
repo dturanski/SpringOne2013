@@ -28,12 +28,13 @@ import org.springframework.xd.demo.gemfire.function.HashTagAnalyzer;
 public class HashTagAnalyzerExecutor {
 	@Autowired
 	HashTagAnalyzer hashTagAnalyzer;
-	public void run(String targetHashTag) {
+	public Map<String,Integer> run(String targetHashTag) {
 		List<Map<String,Integer>> results = hashTagAnalyzer.aggregateAssociatedHashTags(targetHashTag);
 		Map<String,Integer> associatedHashTagCounts = results.get(0);
 		System.out.println(associatedHashTagCounts.size());
 		for (Entry<String,Integer> entry: associatedHashTagCounts.entrySet()) {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
+		return associatedHashTagCounts;
 	}
 }
