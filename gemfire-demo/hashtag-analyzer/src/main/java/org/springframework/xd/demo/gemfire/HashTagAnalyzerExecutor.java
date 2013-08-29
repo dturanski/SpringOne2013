@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.xd.demo.gemfire.function.HashTagAnalyzer;
 
 /**
@@ -25,7 +27,7 @@ import org.springframework.xd.demo.gemfire.function.HashTagAnalyzer;
  *
  */
 @Component
-public class HashTagAnalyzerExecutor {
+public class HashTagAnalyzerExecutor implements InitializingBean {
 	@Autowired
 	HashTagAnalyzer hashTagAnalyzer;
 	public Map<String,Integer> run(String targetHashTag) {
@@ -36,5 +38,13 @@ public class HashTagAnalyzerExecutor {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 		}
 		return associatedHashTagCounts;
+	}
+	/* (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Assert.notNull(hashTagAnalyzer,"hashTagAnalyzer cannot be null");
+		
 	}
 }

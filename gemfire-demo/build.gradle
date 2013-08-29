@@ -13,12 +13,12 @@
 
 ext {
 	junitVersion = '4.11'
-	springVersion = '3.2.2.RELEASE'
+	springVersion = '4.0.0.BUILD-SNAPSHOT'
 	springIntegrationVersion = '3.0.0.M2'
-	springXdVersion ='1.0.0.M2'
 	slf4jVersion = '1.7.5'
 	log4jVersion = '1.2.17'
 	springDataGemfireVersion = '1.3.2.RELEASE'
+	jacksonVersion = '2.2.2'
 }
 
 allprojects {
@@ -41,37 +41,41 @@ allprojects {
 
 dependencies {
 	testCompile "junit:junit:$junitVersion"
-	//testCompile "org.springframework:spring-test:$springVersion"
+	testCompile "org.springframework:spring-test:$springVersion"
 }
 
 project('hashtag-rest') {
+//	configurations {
+//		all*.exclude group:"org.slf4j", name:"slf4j-log4j12"
+//	}
 	dependencies {
- 		compile("org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT")
-    	compile("com.fasterxml.jackson.core:jackson-databind")
-    	//compile project(':hashtag-analyzer')
-
+ 		compile "org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT"
+    	compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    	compile project(':hashtag-analyzer') 
     }
 }
 
 project ('hashtag-analyzer') {
 	dependencies {
+		compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 		compile ("org.springframework.data:spring-data-gemfire:$springDataGemfireVersion") {
-			exclude group: "org.slf4j"
+			exclude group: 'org.springframework'
 		}
- 		compile ("org.springframework.xd:spring-xd-analytics:$springXdVersion") {
-			exclude group: "org.slf4j"
-		}
+		compile "org.springframework:spring-beans:$springVersion"
+		compile "org.springframework:spring-context:$springVersion"
+		compile "org.springframework:spring-tx:$springVersion"
+
 		testCompile "junit:junit:$junitVersion",
 		"org.springframework:spring-test:$springVersion"
-		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion") {
-			exclude group: "org.slf4j"
+		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion"){
+			exclude group: 'org.springframework'
 		}
-		testRuntime("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
-			exclude group: "org.slf4j"
-		}
+		runtime "org.springframework:spring-context:$springVersion"
+		runtime "org.springframework:spring-tx:$springVersion"
+		runtime "org.springframework:spring-aop:$springVersion"
+		runtime "org.springframework:spring-expression:$springVersion"
 	}
 }
-
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.7'

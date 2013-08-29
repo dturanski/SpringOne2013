@@ -12,12 +12,15 @@
  */
 package org.springframework.xd.demo.gemfire;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.xd.demo.gemfire.function.HashTagAnalyzerFunction;
 
 import com.gemstone.gemfire.cache.Region;
 
@@ -51,8 +54,8 @@ public class HashTagAnalyzerDriver {
 	@Resource(name = "hashtags")
 	Region hashtags;
 
-	@Autowired
-	HashTagAnalyzerExecutor hashTagAnalyzerExecutor;
+	//@Autowired
+	//HashTagAnalyzerExecutor hashTagAnalyzerExecutor;
 
 
 	/**
@@ -63,11 +66,19 @@ public class HashTagAnalyzerDriver {
 		ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/spring/client-cache.xml");
 		HashTagAnalyzerDriver driver = context.getBean(HashTagAnalyzerDriver.class);
 		driver.run();
-		
 	}
 	
 	public void run() {
-		hashTagAnalyzerExecutor.run("java");
+		for (Object key: hashtags.keySetOnServer()) {
+			hashtags.get(key);
+		}
+		HashTagAnalyzerFunction fn =new HashTagAnalyzerFunction();
+		Map<String,Integer> map = fn.aggregateAssociatedHashTags(hashtags, "jobs");
+		for (Entry<String,Integer>entry: map.entrySet()) {
+		System.out.println(entry.getKey() + "=" + entry.getValue());	
+		}
+		
+		//hashTagAnalyzerExecutor.run("java");
 	}
 
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 XD_HOME=~/spring-xd-1.0.0.M2
 cp modules/processor/tweetToMap.xml $XD_HOME/xd/modules/processor
-cp build/libs/gemfire-demo.jar $XD_HOME/xd/lib
-cp build/libs/gemfire-demo.jar $XD_HOME/gemfire/lib
+cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/xd/lib
+cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/gemfire/lib
 cp config/twitter-demo.xml $XD_HOME/gemfire/config
