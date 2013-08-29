@@ -8,17 +8,8 @@
  */
 
 
-apply plugin:'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 
-repositories{
-    mavenCentral()
-	maven { url 'http://repo.springsource.org/libs-milestone' }
-	maven { url 'http://repo.springsource.org/libs-snapshot' }
-	maven { url 'http://repo.springsource.org/plugins-release' }
-	maven { url 'http://repo.springsource.org/plugins-snapshot' }
-}
+
 
 ext {
 	junitVersion = '4.11'
@@ -30,18 +21,58 @@ ext {
 	springDataGemfireVersion = '1.3.2.RELEASE'
 }
 
-
-dependencies{
-	compile "org.springframework.data:spring-data-gemfire:$springDataGemfireVersion",
-	 "org.springframework.xd:spring-xd-analytics:$springXdVersion"
- 
-		runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion",
-			"org.slf4j:slf4j-log4j12:$slf4jVersion",
-			"log4j:log4j:$log4jVersion"
-
-		testCompile "junit:junit:$junitVersion",
-		"org.springframework:spring-test:$springVersion"
-		testRuntime "org.springframework.integration:spring-integration-file:$springIntegrationVersion",
-		"org.springframework.xd:spring-xd-dirt:$springXdVersion"
+allprojects {
+	apply plugin:'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	apply plugin: 'base'
+	group = 'org.springframework.xd.demo.gemfire'
+	repositories{
+    	mavenCentral()
+		maven { url 'http://repo.springsource.org/libs-milestone' }
+		maven { url 'http://repo.springsource.org/libs-snapshot' }
+		maven { url 'http://repo.springsource.org/plugins-release' }
+		maven { url 'http://repo.springsource.org/plugins-snapshot' }
+	}
+	sourceCompatibility=1.6
+	targetCompatibility=1.6
+	
 }
 
+dependencies {
+	testCompile "junit:junit:$junitVersion"
+	//testCompile "org.springframework:spring-test:$springVersion"
+}
+
+project('hashtag-rest') {
+	dependencies {
+ 		compile("org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT")
+    	compile("com.fasterxml.jackson.core:jackson-databind")
+    	//compile project(':hashtag-analyzer')
+
+    }
+}
+
+project ('hashtag-analyzer') {
+	dependencies {
+		compile ("org.springframework.data:spring-data-gemfire:$springDataGemfireVersion") {
+			exclude group: "org.slf4j"
+		}
+ 		compile ("org.springframework.xd:spring-xd-analytics:$springXdVersion") {
+			exclude group: "org.slf4j"
+		}
+		testCompile "junit:junit:$junitVersion",
+		"org.springframework:spring-test:$springVersion"
+		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion") {
+			exclude group: "org.slf4j"
+		}
+		testRuntime("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
+			exclude group: "org.slf4j"
+		}
+	}
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.7'
+}
