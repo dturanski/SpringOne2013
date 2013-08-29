@@ -14,7 +14,6 @@ package org.springframework.xd.demo.gemfire;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +32,10 @@ public class HashTagAnalyzerExecutor implements InitializingBean {
 	public Map<String,Integer> run(String targetHashTag) {
 		List<Map<String,Integer>> results = hashTagAnalyzer.aggregateAssociatedHashTags(targetHashTag);
 		Map<String,Integer> associatedHashTagCounts = results.get(0);
-		System.out.println(associatedHashTagCounts.size());
-		for (Entry<String,Integer> entry: associatedHashTagCounts.entrySet()) {
-			System.out.println(entry.getKey() + ":" + entry.getValue());
-		}
+
 		return associatedHashTagCounts;
 	}
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-	 */
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(hashTagAnalyzer,"hashTagAnalyzer cannot be null");
