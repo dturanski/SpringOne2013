@@ -13,7 +13,7 @@
 
 ext {
 	junitVersion = '4.11'
-	springVersion = '4.0.0.BUILD-SNAPSHOT'
+	springVersion = '4.0.0.M3'
 	springIntegrationVersion = '3.0.0.M2'
 	slf4jVersion = '1.7.5'
 	log4jVersion = '1.2.17'
@@ -45,13 +45,21 @@ dependencies {
 }
 
 project('hashtag-rest') {
-//	configurations {
-//		all*.exclude group:"org.slf4j", name:"slf4j-log4j12"
-//	}
+	apply plugin:'application'
+	mainClassName = 'org.springframework.xd.demo.gemfire.Application'
+	
+   // Create the executable jar and exclude some certificates
+   jar {
+	   manifest {
+		   attributes "Implementation-Title": "Hashtag Service"
+		   attributes "Implementation-Version": '1.0'
+		   attributes "Main-Class" : mainClassName
+	   }
+	}
 	dependencies {
  		compile "org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT"
     	compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    	compile project(':hashtag-analyzer') 
+    	compile project(':hashtag-analyzer')
     }
 }
 
