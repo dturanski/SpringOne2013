@@ -7,7 +7,17 @@
  * chapter in the Gradle Userguide available at http://gradle.org/docs/1.6/userguide/tutorial_java_projects.html
  */
 
-
+ buildscript {
+	 repositories {
+		 maven { url "http://repo.springsource.org/libs-snapshot" }
+		 maven { url "http://repo.springsource.org/libs-milestone" }
+		 maven { url "http://repo.springsource.org/libs-plugin-release" }
+		 mavenLocal()
+	 }
+	 dependencies {
+		 classpath("org.springframework.boot:spring-boot-gradle-plugin:0.5.0.BUILD-SNAPSHOT")
+	 }
+ }
 
 
 
@@ -19,6 +29,7 @@ ext {
 	log4jVersion = '1.2.17'
 	springDataGemfireVersion = '1.3.2.RELEASE'
 	jacksonVersion = '2.2.2'
+	springXdVersion ='1.0.0.BUILD-SNAPSHOT'
 }
 
 allprojects {
@@ -46,6 +57,7 @@ dependencies {
 
 project('hashtag-rest') {
 	apply plugin:'application'
+	apply plugin: 'spring-boot'
 	mainClassName = 'org.springframework.xd.demo.gemfire.Application'
 	
    // Create the executable jar and exclude some certificates
@@ -73,9 +85,13 @@ project ('hashtag-analyzer') {
 		compile "org.springframework:spring-context:$springVersion"
 		compile "org.springframework:spring-tx:$springVersion"
 
-		testCompile "junit:junit:$junitVersion",
-		"org.springframework:spring-test:$springVersion"
+		testCompile "junit:junit:$junitVersion"
+		testCompile "org.springframework:spring-test:$springVersion"
+		testCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
 		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion"){
+			exclude group: 'org.springframework'
+		}
+		testRuntime ("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
 			exclude group: 'org.springframework'
 		}
 		runtime "org.springframework:spring-context:$springVersion"

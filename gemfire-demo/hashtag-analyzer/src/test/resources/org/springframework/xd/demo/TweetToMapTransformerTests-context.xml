@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<import resource="file:modules/processor/tweetToMap.xml" />
+	<import resource="file:../modules/processor/tweetToMap.xml" />
 	<int-file:tail-inbound-channel-adapter
 		channel="input" auto-startup="true" file="data/tweets.out"
 		native-options="-F -n 0" file-delay="5000" end="false" />
