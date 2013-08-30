@@ -53,9 +53,9 @@ Running the demo requires
 
 * Build the gemfire-demo project and install required artifacts to XD
 
-		$cd gemfire-demo
-		$./gradlew jar
-		$./install
+		$ cd gemfire-demo
+		$ ./gradlew jar
+		$ ./install
 
 * Start the Gemfire server included with the XD distribution
 
@@ -64,19 +64,19 @@ Running the demo requires
 
 * Start the XD SingleNode server (use a non-default http port)
 
-		$cd $XD_HOME/xd
-		$bin/xd-singlenode --httpPort 8081
+		$ cd $XD_HOME/xd
+		$ bin/xd-singlenode --httpPort 8081
 
 * Create a twitter feed and a gemfire tap. This project includes a _tweetsetup_ script for convenience:
 
-		$cd gemfire-demo
-		$./tweetsetup
+		$ cd gemfire-demo
+		$ ./tweetsetup
 
 This creates a mock twitter feed that reads tweets from a file and outputs to a log, along with a tap to feed the GemFire cache. This is equivalent to the following XD shell commands:
 
-    xd>stream create --name tweets --definition ="tail --name=$FILE --fromEnd=false | log" --deploy false
-    xd>tap create --name hashtags --definition "tap@tweets | tweetToMap | gemfire-server --keyExpression=payload['id']"
-    xd>stream deploy tweets
+    xd> stream create --name tweets --definition ="tail --name=$FILE --fromEnd=false | log" --deploy false
+    xd> tap create --name hashtags --definition "tap@tweets | tweetToMap | gemfire-server --keyExpression=payload['id']"
+    xd> stream deploy tweets
  
 Where _$FILE_ is gemfire-demo/data/tweets.out in this case.
 
@@ -96,8 +96,8 @@ The jar was also copied to GemFire's classpath since _HashTagAnalyzerFunction_ i
 	
 * Start the hashtag REST service by running _Application_ in the _hashtag-rest_ project, e.g:  
 
-	    $cd gemfire-demo
-	    $gradle run
+	    $ cd gemfire-demo
+	    $ gradle run
 	
 
 This is a service built with [Spring Boot](http://blog.springsource.org/2013/08/06/spring-boot-simplifying-spring-for-everyone/) and runs by default on localhost:8080. Once the application starts, point your browser to [http://localhost:8080/associatedhashtags/java](http://localhost:8080/associatedhashtags/java)  where java is the target hashtag. This will invoke the remote funciton and return the results as JSON. Something like:
