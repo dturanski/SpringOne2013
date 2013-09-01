@@ -38,13 +38,12 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section data-state="springonetitle">
-					<img src="img/springonelogo.png" style="border:none;" width="250px"/>
-					<span style="position:relative; TOP:50px;">
+					<img src="img/springonelogo.png" style="border:none;" width="250"/>
+					<div style="position:relative; TOP:50px;">
 					<h1>Real Time Analytics With Spring</h1>
 					<h2>David Turanski</h2>
 					<h2>Luke Taylor</h2>
-					<span>
-					
+					</div>
 				</section>
 
 				<section>
@@ -67,7 +66,7 @@
 				<section >
 					<h1>Spring XD Overview</h1>
 					<br/>
-				
+
 
 					<p align="left"> One stop shop for: </p>
 					<ul>
@@ -77,14 +76,14 @@
 						<li>Data Export</li>
 						<li>Built on existing Spring Assets
 							<ul>
-								<small><li>Spring Integration, Batch, Data</li></small>
+                <li><small>Spring Integration, Batch, Data</small></li>
 							</ul>
 						</li>
 					</ul>
 				<img src="img/springxd1.png" align="right" valign="top"/>
-				 
+
 					<p align="left">XD='extreme data'</p>
-	
+
 					<aside class="notes">
 						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
 					</aside>
@@ -109,11 +108,10 @@
 					<br/>
 					<p>Based on Unix pipes and filters syntax</p>
 					<ul>
-						<li>http | file</li>
-						<li>http --port=8080 | file --rootDir=/data/</li>
-					<p>'http' and 'file' are <em>Module</em> names</p>
-
+						<li><code> http | file</code></li>
+						<li><code>http --port=8080 | file --rootDir=/data/</code></li>
 					</ul>
+					<p>'http' and 'file' are <em>Module</em> names</p>
 				</section>
 				<section>
 					<h1>Spring XD Streams</h1>
@@ -132,13 +130,13 @@
 					<h1>Spring XD Taps</h1>
 					<br/>
 					<p align="left">A <em>Tap</em> is a stream whose source is a point in an existing stream</p>
-					<ul>			
+					<ul>
 						<li>Taps are primarily used for real time analysis</li>
-					
-					<li>Example:					
-						<ul>			
-							<li>twitter-search --query=Bieber | file</li>
-							<li>tap @ twitter-search | fieldvaluecounter --fields=hashtags</li>
+
+					<li>Example:
+						<ul>
+							<li><code>twittersearch --query=Bieber | file</code></li>
+							<li><code>tap twittersearch | field-value-counter --fieldName=hashtags</code></li>
 						</ul>
 					</li>
 					</ul>
@@ -147,35 +145,16 @@
 					<h1>Spring XD Metrics</h1>
 					<br/>
 					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
-					<ul>			
+					<ul>
 						<li>Metrics commonly act as sinks for taps</li>
-					
-					<li>XD includes the following Metrics					
-						<ul>			
+
+					<li>XD includes the following Metrics
+						<ul>
 							<li>Counter</li>
 							<li>Field Value Counter</li>
 							<li>Aggregate Counter</li>
 							<li>Gauge</li>
-							<li>Rich Guage</li>
-						</ul>
-					</li>
-					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
-					</ul>
-				</section>
-				<section>
-					<h1>Spring XD Metrics</h1>
-					<br/>
-					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
-					<ul>			
-						<li>Metrics commonly act as sinks for taps</li>
-					
-					<li>XD includes the following Metrics					
-						<ul>			
-							<li>Counter</li>
-							<li>Field Value Counter</li>
-							<li>Aggregate Counter</li>
-							<li>Gauge</li>
-							<li>Rich Guage</li>
+							<li>Rich Gauge</li>
 						</ul>
 					</li>
 					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
@@ -183,9 +162,8 @@
 				</section>
 				<section>
 					<h1>What is GemFire?</h1>
-					<a align="left" href="
-					http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire">Pivotal GemFire</a>
-					<img src="img/gemfire.png" style="border:none;" height="75px"/>
+					<a align="left" href="http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire">Pivotal GemFire</a>
+					<img src="img/gemfire.png" style="border:none;" height="75"/>
 					<ul>
 						<li>A memory-oriented data grid that supports widely distributed architectures</li>
 					<li>High throughput, low latency, and scalability</li>
@@ -216,14 +194,14 @@
 				</section>
 				<section>
 					<h1>The Demo</h1>
+						<p align="left">Perform real time analytics on the Twitter stream</p>
 					<ul>
-						<p align="left">Perform real time analytics on the Twitter stream<p>
 						<li>Create a Twitter ingest stream with XD</li>
 						<li>Create taps on the Twitter stream to feed XD Metrics</li>
 						<li>Create a tap to pull selected data into GemFire for deeper analysis</li>
 						<li>The GemFire tap will demonstrate how to build and deploy a custom processor</li>
 						<li>Execute a GemFire Function to perform a complex analysis of hash tags</li>
-						<li>Use a custom Dashboard web application to view analytics</li>  
+						<li>Use a custom Dashboard web application to view analytics</li>
 					</ul>
 				</section>
 				<section>
@@ -232,18 +210,18 @@
 				</section>
 				<section>
 					<h1>DIRT Runtime</h1>
-					
+
 					<img src="img/dirt-runtime.png" height="550"/>
 				</section>
 			</div>
 			<footer>
- 				<span>
- 				&copy; 2013 SpringOne 2GX - Do not distribute without permission
- 				<img src="img/springone.png" width="120px" align="right" style="padding-right:50px;"/>
+				<span>
+				&copy; 2013 SpringOne 2GX - Do not distribute without permission
+				<img src="img/springone.png" width="120" align="right" style="padding-right:50px;"/>
 				</span>
 			</footer>
 		</div>
-		
+
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
 
@@ -273,6 +251,6 @@
 			});
 
 		</script>
-		
+
 	</body>
 </html>
