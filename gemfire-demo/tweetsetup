@@ -1,8 +1,9 @@
 #! /bin/sh
 
 URL="http://localhost:8081"
+PWD=`pwd`
 
-FILE=/Users/dturanski/s2build/springOne2013/gemfire-demo/data/tweets.out
+FILE="$PWD/data/tweets.out"
 
 #Create main ingest stream
 curl -v -H "Accept: application/json" -d name=tweets -d definition="tail --name=$FILE --fromEnd=false+%7C+ log" "$URL/streams"
