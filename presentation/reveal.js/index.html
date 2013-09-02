@@ -21,6 +21,11 @@
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
+		<style type="text/css">
+				.reveal ul ul {
+					font-size: 0.75em;
+				}
+		</style>
 		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
 		<script>
 			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
@@ -76,7 +81,7 @@
 						<li>Data Export</li>
 						<li>Built on existing Spring Assets
 							<ul>
-                <li><small>Spring Integration, Batch, Data</small></li>
+								<li>Spring Integration, Batch, Data</li>
 							</ul>
 						</li>
 					</ul>
@@ -95,11 +100,11 @@
 						<li>Open source Apache license</li>
 						<li>Out of the box executable servers
 							<ul>
-								<small><li>not a bunch of jars</li></small>
+								<li>not a bunch of jars</li>
 							</ul>
 						</li>
 						<li>Pluggable Module system</li>
-						<li>Configuration via High level DSL, CLI, and REST services<li>
+						<li>Configuration via High level DSL, CLI, and REST services</li>
 						<li>Simple model for distributing data processing instances</li>
 					</ul>
 				</section>
@@ -111,7 +116,7 @@
 						<li><code> http | file</code></li>
 						<li><code>http --port=8080 | file --rootDir=/data/</code></li>
 					</ul>
-					<p>'http' and 'file' are <em>Module</em> names</p>
+						<p><code>'http'</code> and <code>'file'</code> are <em>Module</em> names</p>
 				</section>
 				<section>
 					<h1>Spring XD Streams</h1>
@@ -123,7 +128,7 @@
 						<li>Module types include: source, processor, sink, job, trigger</li>
 						<li>A Stream is defined using the DSL as <i>[source] | [p1] | ...| [pn] | [sink]</i> (where p1..pn is a chain of processors)</li>
 						<li>XD provides a number of modules out of the box. See <a href="https://github.com/springsource/spring-xd/wiki/Technical-Documentation">Spring XD Technical Documentation</a> for details.</li>
-						<li>You may install custom modules</li>
+						<li>You can install custom modules</li>
 					</ul>
 				</section>
 				<section>
