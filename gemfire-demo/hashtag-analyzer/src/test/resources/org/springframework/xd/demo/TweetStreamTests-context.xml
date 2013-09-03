@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder properties-ref="props"/>
+	<util:properties id="props">
+	</util:properties>
+	<int-file:tail-inbound-channel-adapter
+		channel="input" auto-startup="true" file="../../data/twitter.out"
+		native-options="-F -n 0" file-delay="5000" end="false" />
+
+	<int:transformer input-channel="input" output-channel="to.filter">
+	 <bean class="org.springframework.xd.tuple.integration.JsonToTupleTransformer"/>
+	</int:transformer>
+	
+	<int:filter input-channel="to.filter" 
+	expression="payload.getValue('entities') !=null and payload.getValue('entities')['hashtags'].size()>0" output-channel="output"/>
+	<int:channel id="output">
+		<int:queue />
+	</int:channel>
+</beans>

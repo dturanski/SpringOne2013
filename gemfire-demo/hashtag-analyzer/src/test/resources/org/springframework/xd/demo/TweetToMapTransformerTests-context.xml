@@ -8,7 +8,7 @@
 
 	<import resource="file:../modules/processor/tweetToMap.xml" />
 	<int-file:tail-inbound-channel-adapter
-		channel="input" auto-startup="true" file="data/tweets.out"
+		channel="input" auto-startup="true" file="../../data/javatweets.out"
 		native-options="-F -n 0" file-delay="5000" end="false" />
 	<int:channel id="output">
 		<int:queue />

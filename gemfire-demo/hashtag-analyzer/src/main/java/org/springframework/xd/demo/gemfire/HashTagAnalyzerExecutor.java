@@ -31,6 +31,7 @@ public class HashTagAnalyzerExecutor implements InitializingBean {
 	HashTagAnalyzer hashTagAnalyzer;
 	public Map<String,Integer> run(String targetHashTag) {
 		List<Map<String,Integer>> results = hashTagAnalyzer.aggregateAssociatedHashTags(targetHashTag);
+		//TODO - This only works with a single partition. For multiple partitions, requires a custom ResultCollector to aggregate results from all nodes
 		Map<String,Integer> associatedHashTagCounts = results.get(0);
 
 		return associatedHashTagCounts;

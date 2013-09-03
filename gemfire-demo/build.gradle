@@ -69,7 +69,7 @@ project('hashtag-rest') {
 	   }
 	}
 	dependencies {
- 		compile "org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT"
+ 		compile "org.springframework.boot:spring-boot-starter-web:0.5.0.M2"
     	compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     	compile project(':hashtag-analyzer')
     }
@@ -84,10 +84,15 @@ project ('hashtag-analyzer') {
 		compile "org.springframework:spring-beans:$springVersion"
 		compile "org.springframework:spring-context:$springVersion"
 		compile "org.springframework:spring-tx:$springVersion"
+		compile ("org.springframework.integration:spring-integration-core:$springIntegrationVersion") {
+			exclude group: 'org.springframework'
+		}
+		compile ("org.springframework.xd:spring-xd-tuple:$springXdVersion") {
+			exclude group: 'org.springframework'
+		} 
 
 		testCompile "junit:junit:$junitVersion"
 		testCompile "org.springframework:spring-test:$springVersion"
-		testCompile "org.springframework.integration:spring-integration-core:$springIntegrationVersion"
 		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion"){
 			exclude group: 'org.springframework'
 		}

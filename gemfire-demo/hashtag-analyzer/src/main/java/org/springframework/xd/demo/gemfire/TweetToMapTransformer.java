@@ -14,13 +14,13 @@ package org.springframework.xd.demo.gemfire;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.integration.transformer.MessageTransformationException;
+import org.springframework.xd.tuple.Tuple;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
  * @author David Turanski
@@ -28,19 +28,36 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
  */
 public class TweetToMapTransformer {
 	ObjectMapper mapper = new ObjectMapper();
-	public Map<String,Object> transform(JsonNode root) {
-		Map<String,Object> tweet = new HashMap<String,Object>();
-		List<String> hashTagsList = new ArrayList<String>();
-		ArrayNode hashTags = (ArrayNode) root.get("entities").get("hashTags");
-		for (Iterator<JsonNode> it = hashTags.elements(); it.hasNext();) {
-			JsonNode hashTag = it.next();
-			hashTagsList.add(hashTag.get("text").textValue());
+
+	public Map<String, Object> transform(Object obj) {
+		if (obj instanceof Tuple) {
+			return transformTuple((Tuple) obj);
 		}
-		tweet.put("id",root.get("id").toString());
-		tweet.put("text",root.get("text").textValue());
-		tweet.put("createdAt", root.get("createdAt").asLong());
-		tweet.put("language", root.get("languageCode").textValue());
-		tweet.put("hashTags",hashTagsList);
+		throw new MessageTransformationException("Don't know how to transform " + obj.getClass().getName());
+	}
+
+	/**
+	 * @param obj
+	 * @return
+	 */
+	private Map<String, Object> transformTuple(Tuple tuple) {
+		Map<String, Object> tweet = new HashMap<String, Object>();
+		List<String> hashTagsList = new ArrayList<String>();
+		tweet.put("id", tuple.getValue("id").toString());
+		tweet.put("text", tuple.getString("text"));
+		tweet.put("createdAt", tuple.getLong("createdAt"));
+		tweet.put("language", tuple.getString("languageCode"));
+		Map<?, ?> entities = (Map<?, ?>) tuple.getValue("entities");
+		List<?> htlist = getHashTags(entities);
+		for (Object obj : htlist) {
+			Map<?, ?> htmap = (Map<?, ?>) obj;
+			hashTagsList.add((String) htmap.get("text"));
+		}
+		tweet.put("hashTags", hashTagsList);
 		return tweet;
+	}
+
+	private List<?> getHashTags(Map<?, ?> entities) {
+		return (List<?>) (entities.get("hashtags") == null ? entities.get("hashTags") : entities.get("hashtags"));
 	}
 }

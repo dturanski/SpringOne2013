@@ -7,14 +7,10 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<int:channel id="input" />
-	<int:chain input-channel="input" output-channel="output">
-		<int:transformer>
-			<bean
-				class="org.springframework.integration.x.json.StringToJsonNodeTransformer" />
-		</int:transformer>
-		<int:transformer>
-			<bean class="org.springframework.xd.demo.gemfire.TweetToMapTransformer" />
-		</int:transformer>
-	</int:chain>
+
+	<int:transformer input-channel="input" output-channel="output">
+		<bean class="org.springframework.xd.demo.gemfire.TweetToMapTransformer" />
+	</int:transformer>
+
 	<int:channel id="output" />
 </beans>
