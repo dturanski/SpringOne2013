@@ -3,7 +3,7 @@ Spring XD and GemFire Real Time Analytics Demo
 
 Description
 ---
-The _gemfire-demo_ project illustrates a simple use case for using [GemFire](http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire) with [Spring XD](http://www.springsource.org/spring-xd) for real time analytics. It taps a twitter feed or twitter search and loads summary data along with the hash tags into GemFire for every tweet in the feed. 
+The _gemfire-demo_ project illustrates a simple use case for using [GemFire](http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire) with [Spring XD](http://www.springsource.org/spring-xd) (TODO: update link to new project page)for real time analytics. It taps a twitter feed or twitter search and loads summary data along with the hash tags into GemFire for every tweet in the feed. 
 
 The [HashTagAnalyzerFunction](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/function/HashTagAnalyzerFunction.java) is an example of a complex aggregation algorithm for which a GemFire [function execution](http://pubs.vmware.com/vfabric53/topic/com.vmware.vfabric.gemfire.7.0/developing/function_exec/chapter_overview.html) is appropriate. It accepts a target hash tag, e.g. "java" and iterates over all cached entries returning an aggregate count of associated hash tags. That is, it computes the number of occurences of other hashtags contained in all tweets containing the target hash tag. For example: 
 
@@ -49,7 +49,7 @@ Set Up
 
 Running the demo requires
 
-* Download the [Spring XD distribution](http://repo.springsource.org/libs-milestone/org/springframework/xd/spring-xd/1.0.0.M2/spring-xd-1.0.0.M2.zip), if you haven't done so already
+* Download the [Spring XD distribution](http://repo.springsource.org/libs-milestone/org/springframework/xd/spring-xd/1.0.0.M2/spring-xd-1.0.0.M2.zip) (TODO: This demo may not work under M2 - a susequent fix was added to avoid a NPE), if you haven't done so already
 
 * Build the gemfire-demo project and install required artifacts to XD
 
@@ -67,7 +67,7 @@ Running the demo requires
 		$ cd $XD_HOME/xd
 		$ bin/xd-singlenode 
 		
-* Create a twitter feed and a gemfire tap. This project includes a [tweetsetup]((https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/tweetsetup) script for convenience:
+* Create a twitter feed and a gemfire tap. This project includes a [tweetsetup](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/tweetsetup) script for convenience:
 
 		$ cd gemfire-demo
 		$ ./tweetsetup
