@@ -111,12 +111,15 @@
 				<section>
 					<h1>Spring XD DSL</h1>
 					<br/>
-					<p>Based on Unix pipes and filters syntax</p>
+					<p align="left">Based on Unix pipes and filters syntax</p>
+					<br/>
 					<ul>
 						<li><code> http | file</code></li>
 						<li><code>http --port=8080 | file --rootDir=/data/</code></li>
 					</ul>
-						<p><code>'http'</code> and <code>'file'</code> are <em>Module</em> names</p>
+					<br/>
+					<br/>
+					<p align="left"><code>'http'</code> and <code>'file'</code> are <em>Module</em> names</p>
 				</section>
 				<section>
 					<h1>Spring XD Streams</h1>
@@ -130,6 +133,10 @@
 						<li>XD provides a number of modules out of the box. See <a href="https://github.com/springsource/spring-xd/wiki/Technical-Documentation">Spring XD Technical Documentation</a> for details.</li>
 						<li>You can install custom modules</li>
 					</ul>
+				</section>
+				<section>
+						<h1>Anatomy of a Stream</h1>
+						<img src="img/anatomyOfAStream.jpg" width="100%"/>
 				</section>
 				<section>
 					<h1>Spring XD Taps</h1>
@@ -151,18 +158,21 @@
 					<br/>
 					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
 					<ul>
-						<li>Metrics commonly act as sinks for taps</li>
-
-					<li>XD includes the following Metrics
-						<ul>
-							<li>Counter</li>
-							<li>Field Value Counter</li>
-							<li>Aggregate Counter</li>
-							<li>Gauge</li>
-							<li>Rich Gauge</li>
-						</ul>
-					</li>
-					<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
+						<li>Metrics are modules
+							<ul>
+								<li>commonly act as sinks for taps</li>
+							</ul>
+						</li>
+						<li>XD includes the following Metrics
+							<ul>
+								<li>Counter</li>
+								<li>Field Value Counter</li>
+								<li>Aggregate Counter</li>
+								<li>Gauge</li>
+								<li>Rich Gauge</li>
+							</ul>
+						</li>
+						<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
 					</ul>
 				</section>
 				<section>
