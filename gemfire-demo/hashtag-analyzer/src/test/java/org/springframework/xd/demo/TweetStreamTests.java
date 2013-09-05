@@ -14,11 +14,14 @@ package org.springframework.xd.demo;
 
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
-import org.springframework.integration.core.PollableChannel;
+import org.springframework.integration.MessagingException;
+import org.springframework.integration.core.MessageHandler;
+import org.springframework.integration.core.SubscribableChannel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.xd.tuple.Tuple;
@@ -31,18 +34,22 @@ import org.springframework.xd.tuple.Tuple;
 @ContextConfiguration
 public class TweetStreamTests {
 	@Autowired
-	PollableChannel output;
+	SubscribableChannel output;
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test() {
-		Message<?> msg;
-		while ((msg = output.receive(1000) )!= null){
-			Tuple t = (Tuple)msg.getPayload();
-			Map<?,?> m = (Map<?,?>)t.getValue("entities");
-//			for (Entry ent: m.entrySet()) {
-//				System.out.println(ent.getKey() + "=" + ent.getValue() + " " + ent.getValue().getClass().getName());
-//			}
-			System.out.println(m.get("hashtags"));
-		}
+	
+	public void test() throws InterruptedException {
+		output.subscribe(new MessageHandler() {
+			long start = new DateTime().getMillis();
+			@Override
+			public void handleMessage(Message<?> msg) throws MessagingException {
+				System.out.println(msg.getHeaders().getTimestamp() -start + " " + msg.getHeaders().getId() + " "+ msg.getHeaders().get("delay"));
+				Tuple t = (Tuple)msg.getPayload();
+				Map<?,?> m = (Map<?,?>)t.getValue("entities");
+				System.out.println(m.get("hashtags"));
+				start = msg.getHeaders().getTimestamp();
+			}
+		});
+ 		Thread.sleep(60000);
 	}
 }

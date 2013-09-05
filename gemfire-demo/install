@@ -1,6 +1,7 @@
 #!/bin/bash
 XD_HOME=~/spring-xd
-cp modules/processor/tweetToMap.xml $XD_HOME/xd/modules/processor
+./gradlew build
+cp modules/processor/*.xml $XD_HOME/xd/modules/processor
 cp scripts/hashtags.groovy $XD_HOME/xd/modules/processor/scripts
 cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/xd/lib
 cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/gemfire/lib
