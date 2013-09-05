@@ -59,8 +59,7 @@
 						<li>Notify humans or systems in real time</li>
 						<li>Simple counters and metrics</li>
 						<li>Aggregate Counters</li>
-						<li>Histograms</li>
-						<li>Advanced Metrics: Moving Average, Rates of Change</li>
+						<li>Gauges, Moving Average</li>
 						<li>Complex Event Processing</li>
 					</ul>
 
@@ -127,7 +126,11 @@
 
 					<ul>
 						<li>A <em>Stream</em> is composed of <em>Modules</em></li>
-						<li>A Module is a Spring bean definition files built with Spring Integration or Spring Batch and exposes properties via property placeholders</li>
+						<li>A Module is a Spring bean definition file
+							<ul>
+								<li>Built with Spring Integration or Spring Batch</li>
+								<li>Exposes properties via property placeholders</li>
+							</ul>
 						<li>Module types include: source, processor, sink, job, trigger</li>
 						<li>A Stream is defined using the DSL as <i>[source] | [p1] | ...| [pn] | [sink]</i> (where p1..pn is a chain of processors)</li>
 						<li>XD provides a number of modules out of the box. See <a href="https://github.com/springsource/spring-xd/wiki/Technical-Documentation">Spring XD Technical Documentation</a> for details.</li>
