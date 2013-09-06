@@ -1,0 +1,11 @@
+#
+# XD Shell commands used in the demo
+#
+
+#Create a mock twitter feed
+stream create tweets --definition "tail --name=/Users/dturanski/s2build/springOne2013/data/twitter.out --fromEnd=false | randomDelay --max=200 | log" 
+#Create a real twitter feed
+stream create tweets --definition "twittersearch --query='#spring+OR+#java+OR+#groovy+OR+#grails+OR+#javascipt+OR+#s12gx' | log"
+#Set up a gemfire tap
+tap create hashtags --definition "tap tweets | json-to-tuple | filter --script=hashtags.groovy | tweetToSummary | gemfire-server --keyExpression=payload['id']"
+#Deploy the stream

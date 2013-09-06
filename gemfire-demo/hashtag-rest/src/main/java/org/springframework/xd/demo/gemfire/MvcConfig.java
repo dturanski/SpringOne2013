@@ -10,22 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.springframework.xd.demo.gemfire.function;
+package org.springframework.xd.demo.gemfire;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.data.gemfire.function.annotation.OnRegion;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
- * Interface for GemFire Function proxy
- * 
  * @author David Turanski
  *
  */
-@OnRegion(region="hashtags")
-public interface HashTagAnalyzer {
-	public abstract List<Map<String,Integer>> aggregateAssociatedHashTags(String targetHashTag);
-	public abstract List<Map<String,Integer>> getHashTagCounts();
-
+@Configuration
+@EnableScheduling
+public class MvcConfig  extends WebMvcConfigurationSupport {
+	@Override
+	public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+		configurer.setDefaultTimeout(30*1000L);
+	}
 }

@@ -13,7 +13,6 @@
 package org.springframework.xd.demo.gemfire;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author David Turanski
- *
+ * Converts a {@link Tuple} to a {@link TweetSummary}
  */
-public class TweetToMapTransformer {
+public class TweetToTweetSummaryTransformer {
 	ObjectMapper mapper = new ObjectMapper();
 
-	public Map<String, Object> transform(Object obj) {
+	public TweetSummary transform(Object obj) {
 		if (obj instanceof Tuple) {
 			return transformTuple((Tuple) obj);
 		}
@@ -40,20 +39,20 @@ public class TweetToMapTransformer {
 	 * @param obj
 	 * @return
 	 */
-	private Map<String, Object> transformTuple(Tuple tuple) {
-		Map<String, Object> tweet = new HashMap<String, Object>();
+	private TweetSummary transformTuple(Tuple tuple) {
+		TweetSummary tweet = new TweetSummary();
 		List<String> hashTagsList = new ArrayList<String>();
-		tweet.put("id", tuple.getValue("id").toString());
-		tweet.put("text", tuple.getString("text"));
-		tweet.put("createdAt", tuple.getLong("createdAt"));
-		tweet.put("language", tuple.getString("languageCode"));
+		tweet.setId(tuple.getValue("id").toString());
+		tweet.setText(tuple.getString("text"));
+		tweet.setLang(tuple.getString("languageCode"));
+		tweet.setCreatedAt(tuple.getLong("createdAt"));
 		Map<?, ?> entities = (Map<?, ?>) tuple.getValue("entities");
 		List<?> htlist = getHashTags(entities);
 		for (Object obj : htlist) {
 			Map<?, ?> htmap = (Map<?, ?>) obj;
 			hashTagsList.add((String) htmap.get("text"));
 		}
-		tweet.put("hashTags", hashTagsList);
+		tweet.setHashTags(hashTagsList);
 		return tweet;
 	}
 

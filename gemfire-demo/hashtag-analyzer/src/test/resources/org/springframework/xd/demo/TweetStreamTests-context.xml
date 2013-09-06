@@ -31,6 +31,8 @@
 		expression="payload.getValue('entities') !=null and payload.getValue('entities')['hashtags'].size()>0"
 		output-channel="output" />
 
-	<int:channel id="output"/>
+	<int:channel id="output">
+		<int:queue/>
+	</int:channel>
 	
 </beans>

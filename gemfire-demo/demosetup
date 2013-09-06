@@ -1,5 +1,0 @@
-stream create tweets --definition "tail --name=/Users/dturanski/s2build/springOne2013/data/twitter.out --fromEnd=false | randomDelay --max=2000 | log" 
-#Set up a gemfire tap
-tap create hashtags --definition "tap tweets | json-to-tuple | filter --script=hashtags.groovy | tweetToMap | gemfire-server --keyExpression=payload['id']"
-#Deploy the stream
-#stream deploy tweets

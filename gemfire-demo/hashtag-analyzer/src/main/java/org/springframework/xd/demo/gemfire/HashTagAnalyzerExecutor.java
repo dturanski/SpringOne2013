@@ -29,12 +29,19 @@ import org.springframework.xd.demo.gemfire.function.HashTagAnalyzer;
 public class HashTagAnalyzerExecutor implements InitializingBean {
 	@Autowired
 	HashTagAnalyzer hashTagAnalyzer;
-	public Map<String,Integer> run(String targetHashTag) {
+	public Map<String,Integer> aggregateAssociatedHashTags(String targetHashTag) {
 		List<Map<String,Integer>> results = hashTagAnalyzer.aggregateAssociatedHashTags(targetHashTag);
 		//TODO - This only works with a single partition. For multiple partitions, requires a custom ResultCollector to aggregate results from all nodes
 		Map<String,Integer> associatedHashTagCounts = results.get(0);
 
 		return associatedHashTagCounts;
+	}
+	
+	public Map<String,Integer> getHashTagCounts() {
+		List<Map<String,Integer>> results = hashTagAnalyzer.getHashTagCounts();
+		//TODO - This only works with a single partition. For multiple partitions, requires a custom ResultCollector to aggregate results from all nodes
+		Map<String,Integer> hashTagCounts = results.get(0);
+		return hashTagCounts;
 	}
 
 	@Override

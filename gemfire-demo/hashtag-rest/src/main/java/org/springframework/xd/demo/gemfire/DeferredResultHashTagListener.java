@@ -10,22 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.springframework.xd.demo.gemfire.function;
+package org.springframework.xd.demo.gemfire;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.data.gemfire.function.annotation.OnRegion;
+import org.springframework.web.context.request.async.DeferredResult;
 
 /**
- * Interface for GemFire Function proxy
- * 
  * @author David Turanski
  *
  */
-@OnRegion(region="hashtags")
-public interface HashTagAnalyzer {
-	public abstract List<Map<String,Integer>> aggregateAssociatedHashTags(String targetHashTag);
-	public abstract List<Map<String,Integer>> getHashTagCounts();
-
+public class DeferredResultHashTagListener extends HashTagEventListener {
+	private final DeferredResult<List<TweetSummary>> deferredResult;
+	
+	public DeferredResultHashTagListener(DeferredResult<List<TweetSummary>> deferredResult) {
+		this.deferredResult = deferredResult;
+	}
 }

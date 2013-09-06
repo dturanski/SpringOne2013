@@ -25,17 +25,20 @@ import org.springframework.data.gemfire.function.annotation.GemfireFunction;
 import org.springframework.data.gemfire.function.annotation.RegionData;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.xd.demo.gemfire.TweetSummary;
 
 /**
- * Aggregates counts and sorts by descending count for associated hash tags present with a target hashTag
+ * GemFire Function Implementations
+ 
  * @author David Turanski
  *
  */
 @Component
 public class HashTagAnalyzerFunction {
 	private boolean ignoreCase = true;
-
-	@SuppressWarnings("unchecked")
+	/**
+	* Aggregates counts and sorts by descending count for associated hash tags present with a target hashTag
+	*/
 	@GemfireFunction
 	public Map<String, Integer> aggregateAssociatedHashTags(@RegionData Map<?, ?> data, String targetHashTag) {
 		Map<String, Integer> hashTagCounts = new HashMap<String, Integer>();
@@ -43,7 +46,7 @@ public class HashTagAnalyzerFunction {
 		TreeMap<String, Integer> sorted = new TreeMap<String, Integer>(vc);
 
 		for (Object obj : data.values()) {
-			Map<String, Object> entry = (Map<String, Object>) obj;
+			TweetSummary entry = (TweetSummary) obj;
 			List<String> associatedHashTags = getAssociatedHashTags(entry, targetHashTag);
 			for (String hashTag : associatedHashTags) {
 				if (ignoreCase) {
@@ -68,10 +71,42 @@ public class HashTagAnalyzerFunction {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<String> getAssociatedHashTags(Map<String, Object> entry, String targetHashTag) {
+	/**
+	* Aggregates all hashtag counts and sorts by descending count
+	*/
+	@GemfireFunction
+	public Map<String, Integer> getHashTagCounts(@RegionData Map<?, ?> data) {
+		Map<String, Integer> hashTagCounts = new HashMap<String, Integer>();
+
+		ValueComparator vc = new ValueComparator(hashTagCounts);
+
+		TreeMap<String, Integer> sorted = new TreeMap<String, Integer>(vc);
+
+		for (Object obj : data.values()) {
+			TweetSummary entry = (TweetSummary) obj;
+			List<String> hashTags = entry.getHashTags();
+			for (String hashTag : hashTags) {
+				Integer count = hashTagCounts.get(hashTag);
+				if (count == null) {
+					hashTagCounts.put(hashTag, new Integer(0));
+				}
+				count = hashTagCounts.get(hashTag) + 1;
+				hashTagCounts.put(hashTag, count);
+			}
+		}
+
+		for (Entry<String, Integer> count : hashTagCounts.entrySet()) {
+			int i = count.getValue().intValue();
+			sorted.put(count.getKey(), i);
+		}
+
+		return sorted;
+
+	}
+
+	private List<String> getAssociatedHashTags(TweetSummary entry, String targetHashTag) {
 		List<String> results = new ArrayList<String>();
-		List<String> hashTags = (List<String>) entry.get("hashTags");
+		List<String> hashTags = entry.getHashTags();
 		if (!CollectionUtils.isEmpty(hashTags)) {
 			if (hashTags.contains(targetHashTag) || hashTags.contains(targetHashTag.toUpperCase())
 					|| hashTags.contains(targetHashTag.toLowerCase()) || hashTags.contains(proper(targetHashTag))) {

@@ -52,7 +52,7 @@ import com.gemstone.gemfire.cache.Region;
 public class HashTagAnalyzerDriver {
 
 	@Resource(name = "hashtags")
-	Region hashtags;
+	Region<?,?> hashtags;
 
 	//@Autowired
 	//HashTagAnalyzerExecutor hashTagAnalyzerExecutor;
@@ -61,6 +61,7 @@ public class HashTagAnalyzerDriver {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/spring/client-cache.xml");
@@ -77,8 +78,11 @@ public class HashTagAnalyzerDriver {
 		for (Entry<String,Integer>entry: map.entrySet()) {
 		System.out.println(entry.getKey() + "=" + entry.getValue());	
 		}
-		
-		//hashTagAnalyzerExecutor.run("java");
+		System.out.println("\n============ raw counts:");
+		map = fn.getHashTagCounts(hashtags);
+		for (Entry<String,Integer>entry: map.entrySet()) {
+		System.out.println(entry.getKey() + "=" + entry.getValue());	
+		}
 	}
 
 }

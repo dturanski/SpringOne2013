@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class TweetToMapTransformerTests {
+public class TweetToTweetSummaryTransformerTests {
 	@Autowired
 	PollableChannel output;
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test() {
+	@Ignore
+	public void test() throws InterruptedException {
+	 
 		Message<?> msg;
 		while ((msg = output.receive(1000) )!= null){
 			Map<String,Object> data = (Map<String,Object>)msg.getPayload();
@@ -49,5 +52,6 @@ public class TweetToMapTransformerTests {
 			assertNotNull(data.get("hashTags"));
 			assertTrue(data.get("hashTags") instanceof List);
 		}
+
 	}
 }

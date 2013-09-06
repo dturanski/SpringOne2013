@@ -14,11 +14,12 @@
 
 	<gfe:client-cache/>
 
-	<gfe:pool>
+<!-- Subscription required for CQ -->
+	<gfe:pool subscription-enabled="true">
 		<gfe:server host="localhost" port="40404"/>
 	</gfe:pool>
 
-	<gfe:client-region id="hashtags" shortcut="CACHING_PROXY"/>
+	<gfe:client-region id="hashtags"/>
 	
 	<context:component-scan base-package="org.springframework.xd.demo.gemfire"/>
 

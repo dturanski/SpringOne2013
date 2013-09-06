@@ -67,38 +67,34 @@ Running the demo requires
 		$ cd $XD_HOME/xd
 		$ bin/xd-singlenode 
 		
-* Create a twitter feed and a gemfire tap. This project includes a [tweetsetup](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/tweetsetup) script for convenience:
+* Start the XD Shell
+		
+		$cd $XD_HOME/shell
+		$bin/xd-shell
 
-		$ cd gemfire-demo
-		$ ./tweetsetup
+* Create a feed
+	* Create a mock twitter feed
 
-This creates a mock twitter feed that reads tweets from a file and outputs to a log, along with a tap to feed the GemFire cache. This is equivalent to the following XD shell commands:
+			$xd> stream create tweets --definition "tail --name=$FILE --fromEnd=false | randomDelay --max=200 | log" 
+			
+			where _$FILE_ is gemfire-demo/../data/javatweets.out in this case.
 
-    xd:> stream create --name tweets --definition ="tail --name=$FILE --fromEnd=false | log" --deploy false
-    xd:> tap create --name hashtags --definition "tap@tweets | jsonToTuple | filter --script=hashtags.groovy | tweetToMap | gemfire-server --keyExpression=payload['id']"
-    xd:> stream deploy tweets
- 
-Where _$FILE_ is gemfire-demo/../data/javatweets.out in this case.
-
-To use a live twitter feed, you can create the "tweets" stream as:    
-
-	"twittersearch --query=#Java | log"
+		
+	*	Create a real twitter feed
 	
-Or
+			xd:> stream create tweets --definition "twittersearch --query='#spring+OR+#java+OR+#groovy+OR+#grails+OR+#javascipt+OR+#s12gx' | log"
 
-	"twitterstream | log"
+* Set up a gemfire tap
 
-In fact the javatweets.out file was created by an XD stream:
+		xd:> tap create hashtags --definition "tap tweets | json-to-tuple | filter --script=hashtags.groovy | tweetToSummary | gemfire-server --keyExpression=payload['id']"
 
-	"twittersearch --query=#Java | file"
-
-	(NOTE: See the XD documentation re. twitter authorization requirements)
+		(NOTE: See the XD documentation re. twitter authorization requirements)
 
 So now we have started the twitter feed and populating the cache.  The _hashtags_ tap converts each  twitter payload to an XD Tuple (a generic map like structure). Tweets are filtered for those containing at least one hash tag using the [hashtags.groovy](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/scripts/hashtags.groovy) script. The filter is not really necessary if using the twittersearch source, since the Twitter API has already done the filtering. 
  
-Note the [tweetToMap](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/modules/processors/tweetToMap.xml) processor used in the tap. This converts filtered payloads to a Map containing selected fields. This is backed by the [TweetToMapTransformer](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetToMapTransformer.java) in the _hashtag-analyzer_ project. The custom module, groovy script, and the jar containing the transformer was deployed to XD before via the install command.
+Note the [tweetToSummary](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/modules/processors/tweetToSummary.xml) processor used in the tap. This converts filtered payloads to a [TweetSummary](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetSummary.java) containing selected fields. This is backed by the [TweetToTweetSummaryTransformer](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetToTweetSummaryTransformer.java) in the _hashtag-analyzer_ project. The custom module, groovy scripts, and the jar containing the transformer and any other required classes was deployed to XD before via the install command.
 
-The jar is also copied to GemFire's classpath since [HashTagAnalyzerFunction](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/function/HashTagAnalyzerFunction.java) is configured as a GemFire remote function and will run in the cache server process when invoked.
+The jar is also copied to GemFire's classpath since [HashTagAnalyzerFunction](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/function/HashTagAnalyzerFunction.java) is configured as a GemFire remote function and will run in the cache server process when invoked. Additionally, the function references _TweetSummary_ so that must be on GemFire's classpath as well.
 	
 * Start the hashtag REST service by running [Application](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-rest/src/main/java/org/springframework/xd/demo/gemfire/Application.java) in the _hashtag-rest_ project:
 
@@ -114,4 +110,11 @@ The jar is also copied to GemFire's classpath since [HashTagAnalyzerFunction](ht
 
 The REST service was built with [Spring Boot](http://blog.springsource.org/2013/08/06/spring-boot-simplifying-spring-for-everyone/) and should run on a non-default port, e.g., localhost:8081. Start the service and point your browser to [http://localhost:8081/associatedhashtags/java](http://localhost:8081/associatedhashtags/java)  where _java_ is a path variable containing the target hashtag. This will invoke the remote funciton and return the results as JSON. Something like:
 
-	{"jobs":12,"appengine":12,"job":11,"php":4,"soudev":4,"sql":4,"js":4,"html5":3,"jobboard":	3,"css":3,"opdrachten":3,"ios":3,"desarrolladores":3,"braziljs":3,"javascript":3,"j2se":	2,"desktop":2,"programadores":2,"hibernate":2,"asp":2,"development":2,"computers":	2,"programming":2,"c":2,"framework":2,"developer":2,"contratando":2,"jetty":2,"nuevoleￃﾳn":	2,"vacatures":2,"xml":2,"logic":2,"cs":2,"mￃﾩxico":2,"android":2,"engineering":	2,"windowsazure":	2,"monterrey":2,"game":2,"html":2,"shell":1,"feinabarcelona":1,"caffeine":	1,"j2ee":1,"cafￃﾩ":	1,"stringstextinputoutputi":1,"lambda":1,"brew":1,"batiktulis":1,"songket":	1,"servlets":1,"bag":	1,"like":1,"like4like":1,"startup":1,"7u40":1,"karawitan":	1,"gesformexico":1,"rijobs":1,"net":	1,"spring":1,"javajob":1,"crafts":1,"vacantes":	1,"telecommunications":1,"giftfromjogja":	1,"pictofme":1,"cupofjoe":1,"java8":1,"bali":	1,"consulting":1,"morningmud":1,"littforsinket":	1,"traditional":1,"web":1,"developers":1,"istimewa":1,"testing":1,"kansas":1,"ca":1,"struts":	1,"love":1,"python":1,"automotive":1,"software":1,"sofwaredeveloper":1,"javaee":1,"processing":	1,"fields":1,"organigrama":1,"espresso":1,"coffee":1,"class":1,"likeaboss":1,"picture":	1,"empleo":1,"rest":1,"reflection":1,"sublimetext":1,"ipad":1,"rh":1,"routine":1,"bcnjobs":	1,"vmware":1,"oracle":1,"scala":1,"programador":1,"network":1,"eclipse":1,"ejb":1,"creativeblog":	1,"cappuccino":1,"sumatra":1,"latte":1,"develop":1,"anny":1,"sketch":1,"engineer":1,"instrument":	1,"iphone":1,"database":1,"employeeit":1,"estructurastablasconsusrelaciones":1,"group":	1,"engineers":1,"energy":1} 
+	{"jobs":12,"appengine":12,"job":11,"php":4,"soudev":4,"sql":4,"js":4,"html5":3,"jobboard":	3,"css":3,"opdrachten":3,"ios":3,"desarrolladores":3,"braziljs":3,"javascript":3,"j2se":	2,"desktop":2,"programadores":2,"hibernate":2,"asp":2,"development":2,"computers":	2,"programming":2,"c":2,"framework":2,"developer":2,"contratando":2,"jetty":2,"nuevoleￃﾳn":	2,"vacatures":2,"xml":2,"logic":2,"cs":2,"mￃﾩxico":2,"android":2,"engineering":	2,"windowsazure":	2,"monterrey":2,"game":2,"html":2,"shell":1,"feinabarcelona":1,"caffeine":	1,"j2ee":1,"cafￃﾩ":	1,"stringstextinputoutputi":1,"lambda":1,"brew":1,"batiktulis":1,"songket":	1,"servlets":1,"bag":	1,"like":1,"like4like":1,"startup":1,"7u40":1,"karawitan":	1,"gesformexico":1,"rijobs":1,"net":	1,"spring":1,"javajob":1,"crafts":1,"vacantes":	1,"telecommunications":1,"giftfromjogja":	1,"pictofme":1,"cupofjoe":1,"java8":1,"bali":	1,"consulting":1,"morningmud":1,"littforsinket":	1,"traditional":1,"web":1,"developers":1,"istimewa":1,"testing":1,"kansas":1,"ca":1,"struts":	1,"love":1,"python":1,"automotive":1,"software":1,"sofwaredeveloper":1,"javaee":1,"processing":	1,"fields":1,"organigrama":1,"espresso":1,"coffee":1,"class":1,"likeaboss":1,"picture":	1,"empleo":1,"rest":1,"reflection":1,"sublimetext":1,"ipad":1,"rh":1,"routine":1,"bcnjobs":	1,"vmware":1,"oracle":1,"scala":1,"programador":1,"network":1,"eclipse":1,"ejb":1,"creativeblog":	1,"cappuccino":1,"sumatra":1,"latte":1,"develop":1,"anny":1,"sketch":1,"engineer":1,"instrument":	1,"iphone":1,"database":1,"employeeit":1,"estructurastablasconsusrelaciones":1,"group":	1,"engineers":1,"energy":1}
+	
+The REST API also includes 
+
+[http://localhost:8081/hashtagcounts](http://localhost:8081/hashtagcounts) to return the accumulated total hashtag counts (Analogous to XD field-value-counter but provided here as a convenience)
+
+[http://localhost:8081/watchhashtag/{target}](http://localhost:8081/watchhashtag/java) which 
+illustrates the use of GemFire's Continuous Query capability. This is implemented for long polling using Spring MVC's asynchronous support. The initial invocation for a new target hash tag will return the the current result set and create a continuous query so subsequent invocations will return any new tweets matching the target  

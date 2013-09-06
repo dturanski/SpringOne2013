@@ -9,7 +9,7 @@
 	<int:channel id="input" />
 
 	<int:transformer input-channel="input" output-channel="output">
-		<bean class="org.springframework.xd.demo.gemfire.TweetToMapTransformer" />
+		<bean class="org.springframework.xd.demo.gemfire.TweetToTweetSummaryTransformer" />
 	</int:transformer>
 
 	<int:channel id="output" />
