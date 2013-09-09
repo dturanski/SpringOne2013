@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.integration.transformer.MessageTransformationException;
 import org.springframework.xd.tuple.Tuple;
+import org.springframework.xd.tuple.integration.JsonToTupleTransformer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,13 +29,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Converts a {@link Tuple} to a {@link TweetSummary}
  */
 public class TweetToTweetSummaryTransformer {
+	private static Log logger = LogFactory.getLog(TweetToTweetSummaryTransformer.class);
+	
 	ObjectMapper mapper = new ObjectMapper();
+	
+	JsonToTupleTransformer jsonToTupleTransformer = new JsonToTupleTransformer();
 
 	public TweetSummary transform(Object obj) {
+		try {
+		if (obj instanceof String) {
+			obj = jsonToTupleTransformer.transformPayload((String) obj);
+		}
 		if (obj instanceof Tuple) {
 			return transformTuple((Tuple) obj);
 		}
-		throw new MessageTransformationException("Don't know how to transform " + obj.getClass().getName());
+		logger.error("Don't know how to transform " + obj.getClass().getName());
+		return null;
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			throw new MessageTransformationException(e.getMessage());
+		}
 	}
 
 	/**

@@ -12,9 +12,6 @@
  */
 package org.springframework.xd.demo;
 
-import java.util.Map;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +19,6 @@ import org.springframework.integration.Message;
 import org.springframework.integration.core.PollableChannel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.xd.tuple.Tuple;
 
 /**
  * @author David Turanski
@@ -35,14 +31,14 @@ public class TweetStreamTests {
 	PollableChannel output;
 
 	@Test
-	@Ignore
 	public void test() throws InterruptedException {
 	 
 		Message<?> msg;
-		while ((msg = output.receive(1000) )!= null){
-			Tuple t = (Tuple)msg.getPayload();
-			Map<?,?> m = (Map<?,?>)t.getValue("entities");
-			System.out.println(m.get("hashtags"));
+		while ((msg = output.receive(1000) )!= null) {
+//			Tuple t = (Tuple)msg.getPayload();
+//			Map<?,?> m = (Map<?,?>)t.getValue("entities");
+//			System.out.println(m.get("hashtags"));
+			System.out.println(msg.getPayload());
 		}
 	}
 }

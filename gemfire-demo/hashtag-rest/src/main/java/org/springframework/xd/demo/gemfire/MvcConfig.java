@@ -15,7 +15,6 @@ package org.springframework.xd.demo.gemfire;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
@@ -32,15 +31,16 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class MvcConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-		configurer.setDefaultTimeout(30*1000L);
+		configurer.setDefaultTimeout(30 * 1000L);
 	}
 
+	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new HandlerInterceptorAdapter() {
 			@Override
 			public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 				response.setHeader("Access-Control-Allow-Origin", "http://localhost:9889");
-        return true;
+				return true;
 			}
 		});
 	}

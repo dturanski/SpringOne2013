@@ -13,12 +13,7 @@
 package org.springframework.xd.demo;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +21,7 @@ import org.springframework.integration.Message;
 import org.springframework.integration.core.PollableChannel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.xd.demo.gemfire.TweetSummary;
 
 /**
  * @author David Turanski
@@ -36,22 +32,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TweetToTweetSummaryTransformerTests {
 	@Autowired
 	PollableChannel output;
-	@SuppressWarnings("unchecked")
+
 	@Test
-	@Ignore
 	public void test() throws InterruptedException {
 	 
 		Message<?> msg;
 		while ((msg = output.receive(1000) )!= null){
-			Map<String,Object> data = (Map<String,Object>)msg.getPayload();
-			assertNotNull(data.get("id"));
-			assertTrue(data.get("id") instanceof String);
-			assertNotNull(data.get("text"));
-			assertNotNull(data.get("createdAt"));
-			assertTrue(data.get("createdAt") instanceof Long );
-			assertNotNull(data.get("hashTags"));
-			assertTrue(data.get("hashTags") instanceof List);
+			TweetSummary data = (TweetSummary)msg.getPayload();
+			assertNotNull(data.getId());
+			assertNotNull(data.getText());
+			assertNotNull(data.getCreatedAt());
+			assertNotNull(data.getHashTags());
 		}
-
 	}
 }
