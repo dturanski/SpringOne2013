@@ -12,10 +12,13 @@
  */
 package org.springframework.xd.demo.gemfire;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
+import org.springframework.integration.x.twitter.XDHashTagEntity;
+import org.springframework.integration.x.twitter.XDTweet;
 /**
  * Value object for cached tweets
  * 
@@ -31,6 +34,22 @@ public class TweetSummary implements Serializable {
 	private String lang;
 	private List<String> hashTags;
 	private long createdAt;
+
+	public TweetSummary(XDTweet tweet){
+		this.id = String.valueOf(tweet.getId());
+		this.text = tweet.getText();
+		this.lang = tweet.getLanguageCode();
+		this.createdAt = tweet.getCreatedAt().getTime();
+		this.hashTags = new ArrayList<String>(tweet.getEntities().getHashTags().size());
+		List<XDHashTagEntity> tags = tweet.getEntities().getHashTags();
+		for (XDHashTagEntity tag: tags) {
+			hashTags.add(tag.getText());
+		}
+	}
+	
+	public TweetSummary(){
+		
+	}
 	/**
 	 * @return the id
 	 */

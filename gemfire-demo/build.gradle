@@ -95,8 +95,8 @@ project ('hashtag-analyzer') {
 		testRuntime ("org.springframework.integration:spring-integration-file:$springIntegrationVersion"){
 			exclude group: 'org.springframework'
 		}
-		testRuntime ("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
-			exclude group: 'org.springframework'
+		compile ("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
+			transitive = false
 		}
 		runtime "org.springframework:spring-context:$springVersion"
 		runtime "org.springframework:spring-tx:$springVersion"
