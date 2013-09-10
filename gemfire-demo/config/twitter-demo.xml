@@ -16,6 +16,7 @@
 				<constructor-arg name="level" value="INFO" />
 			</bean>
 		</gfe:cache-listener>
+		<gfe:entry-ttl timeout="900"/>
 	</gfe:partitioned-region>
 
 	<gfe:cache-server port="40404" />

@@ -7,5 +7,5 @@ stream create tweets --definition "tail --name=/Users/dturanski/s2build/springOn
 #Create a real twitter feed
 stream create tweets --definition "twittersearch --query='#spring+OR+#java+OR+#groovy+OR+#grails+OR+#javascipt+OR+#s12gx' | log"
 #Set up a gemfire tap
-tap create hashtags --definition "tap tweets | json-to-tuple | filter --script=hashtags.groovy | tweetToSummary | gemfire-server --keyExpression=payload['id']"
+stream create hashtags --definition "tap:tweets > transform --script=tweetSummary.groovy | gemfire-server --regionName=hashtags --keyExpression=payload.id"
 #Deploy the stream
