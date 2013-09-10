@@ -11,8 +11,7 @@ A demonstration showing some GemFire features supporting Realtime Analytics
 [Dashboard](https://github.com/tekul/andemo)
 An HTML 5 single page app built with d3.js to view Spring XD metrics and cached data graphically
 
-![image width](dashboard.png)
-
+<img src="dashboard.png" style="width: 600px;"/>
 
 
 
