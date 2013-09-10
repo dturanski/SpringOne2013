@@ -3,7 +3,7 @@ SpringOne2013
 
 SpringOne 2GX 2013 Realtime Analytics With Spring Demo Code and Presentation
 
-[Presentation](presentation/index.html)
+[Presentation](presentation)
 
 [GemFire Demo](gemfire-demo)
 A demonstration showing some GemFire features supporting Realtime Analytics
