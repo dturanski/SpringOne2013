@@ -83,7 +83,7 @@ public class HashTagController {
 			}
 		});
 		
-		if (results != null) {
+		if (!results.isEmpty()) {
 			deferredResult.setResult(results);
 		}
 		return deferredResult;
