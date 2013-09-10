@@ -49,7 +49,7 @@ Set Up
 
 Running the demo requires
 
-* Download the [Spring XD distribution](http://repo.springsource.org/libs-milestone/org/springframework/xd/spring-xd/1.0.0.M2/spring-xd-1.0.0.M2.zip) (TODO: This demo may not work under M2 - a susequent fix was added to avoid a NPE), if you haven't done so already
+* Download the [Spring XD distribution](http://repo.springsource.org/libs-milestone/org/springframework/xd/spring-xd/1.0.0.M3/spring-xd-1.0.0.M3.zip), if you haven't done so already
 
 * Build the gemfire-demo project and install required artifacts to XD
 
@@ -86,13 +86,11 @@ Running the demo requires
 
 * Set up a gemfire tap
 
-		xd:> tap create hashtags --definition "tap tweets | json-to-tuple | filter --script=hashtags.groovy | tweetToSummary | gemfire-server --keyExpression=payload['id']"
+		xd:>stream create hashtags --definition "tap:tweets  > transform --script tweetToSummary.groovy | gemfire-server --keyExpression=payload['id']"
 
 		(NOTE: See the XD documentation re. twitter authorization requirements)
 
-So now we have started the twitter feed and populating the cache.  The _hashtags_ tap converts each  twitter payload to an XD Tuple (a generic map like structure). Tweets are filtered for those containing at least one hash tag using the [hashtags.groovy](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/scripts/hashtags.groovy) script. The filter is not really necessary if using the twittersearch source, since the Twitter API has already done the filtering. 
- 
-Note the [tweetToSummary](https://github.com/dturanski/SpringOne2013/tree/master/gemfire-demo/modules/processor/tweetToSummary.xml) processor used in the tap. This converts filtered payloads to a [TweetSummary](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetSummary.java) containing selected fields. This is backed by the [TweetToTweetSummaryTransformer](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetToTweetSummaryTransformer.java) in the _hashtag-analyzer_ project. The custom module, groovy scripts, and the jar containing the transformer and any other required classes was deployed to XD before via the install command.
+So now we have started the twitter feed and populating the cache.  The _hashtags_ tap converts each  twitter payload to a [TweetSummary](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/TweetSummary.java) containing selected fields. The custom module, groovy scripts, and the jar containing the transformer and any other required classes were deployed to XD before via the install command.
 
 The jar is also copied to GemFire's classpath since [HashTagAnalyzerFunction](https://github.com/dturanski/SpringOne2013/blob/master/gemfire-demo/hashtag-analyzer/src/main/java/org/springframework/xd/demo/gemfire/function/HashTagAnalyzerFunction.java) is configured as a GemFire remote function and will run in the cache server process when invoked. Additionally, the function references _TweetSummary_ so that must be on GemFire's classpath as well.
 	
