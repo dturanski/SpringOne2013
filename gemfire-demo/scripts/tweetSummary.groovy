@@ -9,6 +9,7 @@ if (payload instanceof String) {
 	def result = slurper.parseText(payload)
 	DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss Z yyyy");
 	DateTime dt = DateTime.parse(result.created_at,formatter);
+
 	TweetSummary tweetSummary = new TweetSummary(
 		id:result.id,
 		text: result.text,
