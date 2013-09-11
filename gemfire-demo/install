@@ -5,5 +5,5 @@ cp modules/processor/*.xml $XD_HOME/xd/modules/processor
 cp scripts/*.groovy $XD_HOME/xd/modules/processor/scripts
 cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/xd/lib
 cp hashtag-analyzer/build/libs/hashtag-analyzer.jar $XD_HOME/gemfire/lib
-cp $XD_HOME/xd/lib $XD_HOME/gemfire/lib
+cp $XD_HOME/xd/lib/spring-xd-dirt*.jar $XD_HOME/gemfire/lib
 cp config/twitter-demo.xml $XD_HOME/gemfire/config

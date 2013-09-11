@@ -107,13 +107,13 @@ public class HashTagCQ implements InitializingBean, DisposableBean {
 	 */
 	private String buildQueryString(String targetHashtag) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from /hashtags h where (h.hashTags.contains('")
+		sb.append("select * from /hashtags h where (h.text.contains('")
 		.append(targetHashtag.toLowerCase())
-		.append("') or h.hashTags.contains('")
+		.append("') or h.text.contains('")
 		.append(targetHashtag).
-		 append("') or h.hashTags.contains('")
+		 append("') or h.text.contains('")
 		.append(targetHashtag.toUpperCase())
-		.append("') or h.hashTags .contains('")
+		.append("') or h.text .contains('")
 		.append(targetHashtag.substring(0, 1).toUpperCase()+ targetHashtag.substring(1).toLowerCase())
 		.append("'))");
 		return sb.toString();

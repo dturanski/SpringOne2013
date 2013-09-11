@@ -53,7 +53,7 @@ public class HashTagController {
 		return hashTagAnalyzer.getHashTagCounts();
 	}
 	
-	@RequestMapping("/watchhashtag/{target}")
+	@RequestMapping("/tweetwatch/{target}")
 	public @ResponseBody  DeferredResult<List<TweetSummary>> watchHashTag(@PathVariable("target") final String target) {
 		final DeferredResult<List<TweetSummary>> deferredResult = new DeferredResult<List<TweetSummary>>(null, Collections.emptyList());
 		  // Add deferredResult to a Queue or a Map...
