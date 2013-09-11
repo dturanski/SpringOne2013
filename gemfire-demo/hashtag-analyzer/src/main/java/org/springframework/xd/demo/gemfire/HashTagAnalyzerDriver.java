@@ -54,10 +54,6 @@ public class HashTagAnalyzerDriver {
 	@Resource(name = "hashtags")
 	Region<?,?> hashtags;
 
-	//@Autowired
-	//HashTagAnalyzerExecutor hashTagAnalyzerExecutor;
-
-
 	/**
 	 * @param args
 	 */
@@ -74,7 +70,7 @@ public class HashTagAnalyzerDriver {
 			hashtags.get(key);
 		}
 		HashTagAnalyzerFunction fn =new HashTagAnalyzerFunction();
-		Map<String,Integer> map = fn.aggregateAssociatedHashTags(hashtags, "jobs");
+		Map<String,Integer> map = fn.aggregateAssociatedHashTags(hashtags, "java");
 		for (Entry<String,Integer>entry: map.entrySet()) {
 		System.out.println(entry.getKey() + "=" + entry.getValue());	
 		}
