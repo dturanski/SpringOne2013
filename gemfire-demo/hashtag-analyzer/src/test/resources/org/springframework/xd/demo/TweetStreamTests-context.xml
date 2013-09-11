@@ -1,55 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-file="http://www.springframework.org/schema/integration/file"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:int-groovy="http://www.springframework.org/schema/integration/groovy"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
-		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/integration/groovy http://www.springframework.org/schema/integration/groovy/spring-integration-groovy.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<context:property-placeholder
-		properties-ref="props" />
-	<util:properties id="props">
-		<prop key="discardDeletes">false</prop>
-	</util:properties>
-
-	<bean id="integrationEvaluationContext"
-		class="org.springframework.integration.config.IntegrationEvaluationContextFactoryBean">
-		<property name="propertyAccessors">
-			<list>
-				<bean class="org.springframework.xd.tuple.spel.TuplePropertyAccessor" />
-				<bean class="org.springframework.integration.json.JsonPropertyAccessor" />
-			</list>
-		</property>
-	</bean>
-
-	<int-file:tail-inbound-channel-adapter
-		channel="input" auto-startup="true" file="../../data/tweets.out"
-		native-options="-F -n 0" file-delay="5000" end="false" />
-
-	<int:router id="discardDeletesPropertyExists" input-channel="input"
-		expression="${discardDeletes:true} ? 'to.filter':'to.tupletransformer'" />
-
-	<int:filter id="discardDeletes" input-channel="to.filter"
-		output-channel="to.tupletransformer" discard-channel="foo"
-		expression="!(payload matches '^\{\s*&quot;delete&quot;\s*:.*' )" />
-
-	<int:transformer input-channel="to.tupletransformer"
-		output-channel="to.speltransformer">
-		<bean
-			class="org.springframework.xd.tuple.integration.JsonToTupleTransformer" />
+	<int:transformer input-channel="input" output-channel="output">
+		<int-groovy:script location="file:../scripts/tweetSummary.groovy"/>
 	</int:transformer>
-
-	<int:transformer input-channel="to.speltransformer"
-		expression="payload.entities.hashtags.![text]" output-channel="output" />
 	<int:channel id="output">
-		<int:queue />
+		<int:queue/>
 	</int:channel>
-
-	<int:logging-channel-adapter id="foo"
-		level="WARN" />
 </beans>

@@ -9,7 +9,7 @@
 
 	<context:component-scan base-package="org.springframework.xd.demo.gemfire.function"/>	
 	<gfe:annotation-driven />
-	<gfe:cache />
+	<gfe:cache/>
 	<gfe:partitioned-region id="hashtags">
 		<gfe:cache-listener>
 			<bean class="org.springframework.xd.gemfire.LoggingCacheListener">

@@ -98,6 +98,7 @@ project ('hashtag-analyzer') {
 		testRuntime ("org.springframework.integration:spring-integration-groovy:$springIntegrationVersion"){
 			exclude group: 'org.springframework'
 		}
+		testRuntime 'joda-time:joda-time:2.3'
 		compile ("org.springframework.xd:spring-xd-dirt:$springXdVersion"){
 			transitive = false
 		}

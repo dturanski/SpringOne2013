@@ -12,14 +12,22 @@
  */
 package org.springframework.xd.demo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
+import org.springframework.integration.MessageChannel;
 import org.springframework.integration.core.PollableChannel;
+import org.springframework.integration.message.GenericMessage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+import org.springframework.xd.demo.gemfire.TweetSummary;
 /**
  * @author David Turanski
  *
@@ -29,16 +37,30 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TweetStreamTests {
 	@Autowired
 	PollableChannel output;
+	@Autowired
+	MessageChannel input;
 
 	@Test
-	public void test() throws InterruptedException {
-	 
-		Message<?> msg;
-		while ((msg = output.receive(1000) )!= null) {
-//			Tuple t = (Tuple)msg.getPayload();
-//			Map<?,?> m = (Map<?,?>)t.getValue("entities");
-//			System.out.println(m.get("hashtags"));
-			System.out.println(msg.getPayload());
+	@Ignore
+	public void test() throws InterruptedException, IOException {
+		File file = new File("../../data/twitter.out");
+
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		String tweet = null;
+		int num = 0;
+		while ((tweet = reader.readLine())!=null && num < 10){
+			input.send(new GenericMessage<String>(tweet));
+			Message<?> msg;
+			while ((msg = output.receive(1000) )!= null) {
+				TweetSummary summary = (TweetSummary)msg.getPayload();
+				if (summary.getHashTags().size() > 0) {
+					num++;
+					System.out.println(summary.getHashTags());
+				}
+			}
 		}
+		reader.close();
+
 	}
 }
