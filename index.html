@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Real Time Analytics with Spring</title>
+
+		<meta name="description" content="SpringOne 2013 Presentation">
+		<meta name="author" content="David Turanski, Luke Taylor">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<style type="text/css">
+				.reveal ul ul {
+					font-size: 0.75em;
+				}
+		</style>
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-state="springonetitle">
+					<img src="img/springonelogo.png" style="border:none;" width="250"/>
+					<div style="position:relative; TOP:50px;">
+					<h1>Real Time Analytics With Spring</h1>
+					<h2>David Turanski</h2>
+					<h2>Luke Taylor</h2>
+					</div>
+				</section>
+
+				<section>
+					<h1>Real Time Analytics</h1>
+					<br>
+					<p align="left">What's happening right now?</p>
+					<ul>
+						<li>Event driven</li>
+						<li>Notify humans or systems in real time</li>
+						<li>Simple counters and metrics</li>
+						<li>Aggregate Counters</li>
+						<li>Gauges, Moving Average</li>
+						<li>Complex Event Processing</li>
+					</ul>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+				<section >
+					<h1>Spring XD Overview</h1>
+					<br>
+					<p align="left"> One stop shop for: </p>
+					<ul>
+						<li>Data Ingestion</li>
+						<li>Real-time Analytics</li>
+						<li>Workflow Orchestration</li>
+						<li>Data Export</li>
+						<li>Built on existing Spring Assets
+							<ul>
+								<li>Spring Integration, Batch, Data</li>
+							</ul>
+						</li>
+					</ul>
+				<img src="img/springxd1.png" align="right" valign="top"/>
+
+					<p align="left">XD='extreme data'</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+				<section>
+					<h1>Spring XD</h1>
+					<br>
+					<ul>
+						<li>Open source Apache license</li>
+						<li>Out of the box executable servers
+							<ul>
+								<li>not a bunch of jars</li>
+							</ul>
+						</li>
+						<li>Pluggable Module system</li>
+						<li>Configuration via High level DSL, CLI, and REST services</li>
+						
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD DSL</h1>
+					<br>
+					<p align="left">Based on Unix pipes and filters syntax</p>
+					<br>
+					<ul>
+						<li><code> http | file</code></li>
+						<li><code>http --port=8080 | file --rootDir=/data/</code></li>
+					</ul>
+					<br>
+					<br>
+					<p align="left"><code>'http'</code> and <code>'file'</code> are <em>Module</em> names</p>
+				</section>
+				<section>
+					<h1>Spring XD Streams</h1>
+					<br>
+
+					<ul>
+						<li>A <em>Stream</em> is composed of <em>Modules</em></li>
+						<li>A Module is a Spring bean definition file
+							<ul>
+								<li>Built with Spring Integration or Spring Batch</li>
+								<li>Exposes properties via property placeholders</li>
+							</ul>
+						<li>Module types include: source, processor, sink, job, trigger</li>
+						<li>A Stream is defined using the DSL as <i>[source] | [p1] | ...| [pn] | [sink]</i> (where p1..pn is a chain of processors)</li>
+						<li>XD provides a number of modules out of the box. See <a href="https://github.com/springsource/spring-xd/wiki/Technical-Documentation">Spring XD Technical Documentation</a> for details.</li>
+						<li>You can install custom modules</li>
+					</ul>
+				</section>
+				<section>
+						<h1>Anatomy of a Stream</h1>
+						<img src="img/anatomyOfAStreamv2.jpg" width="70%" style="border:none;"/>
+				</section>
+				<section>
+						<h1>XD Single Node</h1>
+						<img src="img/anatomyOfAStreamSingleNode.jpg" width="50%" style="border:none;"/>
+				</section>
+				<section>
+					<h1>Spring XD Taps</h1>
+					<br>
+					<p align="left">A <em>Tap</em> is a stream whose source is a point in an existing stream</p>
+					<ul>
+						<li>Taps are primarily used for real time analysis</li>
+
+					<li>Example:
+						<ul>
+							<li><code>twittersearch --query=Bieber | file</code></li>
+							<li><code>tap:twittersearch &gt; field-value-counter --fieldName=entities.hashtags.text</code></li>
+						</ul>
+					</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Spring XD Metrics</h1>
+					<br>
+					<p align="left">Spring XD provides persistent and in-memory Metrics Repositories</p>
+					<ul>
+						<li>Metrics are modules
+							<ul>
+								<li>commonly act as sinks for taps</li>
+							</ul>
+						</li>
+						<li>XD includes the following Metrics
+							<ul>
+								<li>Counter</li>
+								<li>Field Value Counter</li>
+								<li>Aggregate Counter</li>
+								<li>Gauge</li>
+								<li>Rich Gauge</li>
+							</ul>
+						</li>
+						<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>What is GemFire?</h1>
+					<a align="left" valign="top" href="http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire">Pivotal GemFire<img src="img/gemfire.png" style="border:none;" height="55"/></a>
+
+					<ul>
+						<li>A memory-oriented data grid that supports widely distributed architectures</li>
+					<li>High throughput, low latency, and scalability</li>
+					<li>Reliable event notification and guaranteed delivery</li>
+					<li>Continuous querying</li>
+					<li>Remote function execution</li>
+					<li>Language Interoperability: C++, C# and Java client applications</li>
+					<li>Supports various distributed system topologies</li>
+					<li>Full Spring support (Spring Data GemFire)</li>
+					<li>Well positioned for real time analytics</li>
+				</section>
+				<section>
+					<h1>GemFire Function Execution</h1>
+					<br>
+					<ul>
+						<li>Efficient way to process large data volumes "where the data lives"</li>
+						<li>Java code deployed to GemFire server nodes</li>
+						<li>The Function runs on local cache node and transports results over the network to the process that executed the function (Execution)</li>
+						<li>Function Execution aggregates results using a ResultCollector</li>
+					</ul>
+				</section>
+				<section>
+					<h1>GemFire Continuous Query</h1>
+					<br>
+					<ul>
+						<li>Good for asynchronous notification of data updates</li>
+						<li>Client subscribes to a data query and binds it to a QueryListener callback</li>
+						<li>GemFire invokes the QueryListener whenever the query's result set changes state</li>
+					</ul>
+				</section>
+				<section>
+					<h1>The Demo</h1>
+					<br>
+					<p align="left">Perform real time analytics on the Twitter stream</p>
+					<ul>
+						<li>Create a Twitter ingest stream with XD</li>
+						<li>Create taps on the Twitter stream to feed XD Metrics</li>
+						<li>Create a tap to pull selected data into GemFire for deeper analysis
+							<ul>
+								<li>Show how to build and deploy a custom processor</li>
+							</ul>
+						</li>
+						<li>Execute a GemFire Function to perform a complex analysis of hash tags</li>
+						<li>Dashboard web app to view analytics</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Demo Components</h1>
+					<a href="https://github.com/dturanski/SpringOne2013">github.com/dturanski/SpringOne2013</a>
+					<img src="img/rtdemo.jpg" width="60%" style="border:none;"/>
+				</section>
+				<section>
+					<h1>Questions?</h1>
+					<img src="img/questions.png" width="70%"/>
+				</section>
+				<section>
+					<img src="img/spring.jpg" width="18%" style="border:none;" />
+					<h1>Learn More. Stay Connected</h1>
+
+				<h3 align="left">Project Sites</h3>
+				<ul style="display:block;">
+					<li>Spring XD <a href="projects.spring.io/spring-xd">projects.spring.io/spring-xd</a></li>
+					<li>Spring Data GemFire <a href="projects.spring.io/spring-data-gemfire">projects.spring.io/spring-data-gemfire</a></li>
+				</ul>
+				<h3 align="left">Related sessions</h3>
+				<ul>
+					<li>Thu 12:45 Real Time Event Processing and Decision Making - Lyndon Adams</li>
+					<li>XD and Pivotal HD Demo - Demo lounge
+				</ul>
+				<br><br>
+				<ul style="display:block;">
+					<li>Talk to us on Twitter: @springcentral</li>
+					<li>Find Session replays on YouTube: <a href="http://spring.io/video">spring.io/video</a></li>
+				</ul>
+				</section>
+
+			</div>
+			<footer>
+				<span>
+				&copy; 2013 SpringOne 2GX - Do not distribute without permission
+				<img src="img/springone.png" width="120" align="right" style="padding-right:50px;"/>
+				</span>
+			</footer>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				width: 1600,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

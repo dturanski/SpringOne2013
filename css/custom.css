@@ -1,0 +1,44 @@
+
+.reveal .slides {
+	zoom: 100%;
+}
+
+.reveal {
+  font-family: "Arial";
+  font-size: 44px;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color:#4A8F11; }
+
+html.springonetitle body {
+	background:url("../img/springonebackground.png");
+	background-position:center;
+	background-size: 100%;
+}
+
+html.springxd small {
+	color: black;
+}
+
+.reveal footer {
+	font-size: 14px ;
+	color: rgb(30,30,30);
+	position:absolute;
+   	bottom:0px;
+   	width:100%;
+   	padding-left: 5px;
+   	padding-top: 5px;
+   	padding-bottom: 5px;
+   	padding-right: 5px;
+   	background: rgb(235, 235, 235);
+}
+
+html.springxd blockquote {
+	font-size:1.5em;
+	color:rgba(0,0,0,0.6);
+}
+
+.reveal h1 { font-size: 2.00em; font-weight:bold; color:rgba(30, 30, 30 , 0.6); }
+.reveal h2 { font-size: 1.50em;	color:rgba(30, 30, 30 , 0.6); }
+.reveal h3 { font-size: 1.25em;	color:rgba(30, 30, 30 , 0.6)}
+.reveal h4 { font-size: 1em;	}
