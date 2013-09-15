@@ -103,7 +103,7 @@
 						</li>
 						<li>Pluggable Module system</li>
 						<li>Configuration via High level DSL, CLI, and REST services</li>
-						<li>Simple model for distributing data processing instances</li>
+						
 					</ul>
 				</section>
 				<section>
@@ -154,7 +154,7 @@
 					<li>Example:
 						<ul>
 							<li><code>twittersearch --query=Bieber | file</code></li>
-							<li><code>tap:twittersearch &gt; field-value-counter --fieldName=hashtags</code></li>
+							<li><code>tap:twittersearch &gt; field-value-counter --fieldName=entities.hashtags.text</code></li>
 						</ul>
 					</li>
 					</ul>
@@ -181,14 +181,7 @@
 						<li>See <a href="https://github.com/SpringSource/spring-xd/wiki/Analytics">Spring XD Analytics Documentation</a> for details.</li>
 					</ul>
 				</section>
-				<section>
-						<h1>Anatomy of a Tap</h1>
-						<img src="img/anatomyOfATap.jpg" width="80%" style="border:none;"/>
-				</section>
-				<section>
-						<h1>Metric Tap</h1>
-						<img src="img/MetricTap.jpg" width="80%" style="border:none;"/>
-				</section>
+
 				<section>
 					<h1>What is GemFire?</h1>
 					<a align="left" valign="top" href="http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire">Pivotal GemFire<img src="img/gemfire.png" style="border:none;" height="55"/></a>
@@ -241,6 +234,7 @@
 				</section>
 				<section>
 					<h1>Demo Components</h1>
+					<a href="https://github.com/dturanski/SpringOne2013">github.com/dturanski/SpringOne2013</a>
 					<img src="img/rtdemo.jpg" width="60%" style="border:none;"/>
 				</section>
 				<section>

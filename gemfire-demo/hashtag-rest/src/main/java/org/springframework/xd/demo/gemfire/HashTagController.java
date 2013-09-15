@@ -20,53 +20,50 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import com.gemstone.gemfire.cache.Region;
+
 
 /**
  * @author David Turanski
  *
  */
-@Controller
+@RestController
 public class HashTagController {
 	@Resource(name = "hashtags")
-	private Region<String, TweetSummary> hashtags;
+	private Region<String,TweetSummary> hashtags;
 
-	private Map<String, HashTagCQ> hashTaqQueries = new ConcurrentHashMap<String, HashTagCQ>();
-	private Map<DeferredResult<List<TweetSummary>>, HashTagCQ> watchedTweetRequests = new ConcurrentHashMap<DeferredResult<List<TweetSummary>>, HashTagCQ>();
+	private Map<String,HashTagCQ> hashTaqQueries = new ConcurrentHashMap<String,HashTagCQ>();
+	private Map<DeferredResult<List<TweetSummary>>,HashTagCQ> watchedTweetRequests = new ConcurrentHashMap<DeferredResult<List<TweetSummary>>,HashTagCQ>();
 
-	@Autowired
+	@Autowired 
 	HashTagAnalyzerExecutor hashTagAnalyzer;
-
 	@RequestMapping("/associatedhashtags/{target}")
-	public @ResponseBody
-	Map<String, Integer> getAssociatedHashTags(@PathVariable("target") String target) {
+	public @ResponseBody  Map<String,Integer> getAssociatedHashTags(@PathVariable("target") String target) {
 		return hashTagAnalyzer.aggregateAssociatedHashTags(target);
 	}
-
+	
 	@RequestMapping("/hashtagcounts")
-	public @ResponseBody
-	Map<String, Integer> getHashTagCounts() {
+	public @ResponseBody  Map<String,Integer> getHashTagCounts() {
 		return hashTagAnalyzer.getHashTagCounts();
 	}
-
+	
 	@RequestMapping("/tweetwatch/{target}")
-	public @ResponseBody
-	DeferredResult<List<TweetSummary>> watchHashTag(@PathVariable("target") final String target) {
-		final DeferredResult<List<TweetSummary>> deferredResult = new DeferredResult<List<TweetSummary>>(null,
-				Collections.emptyList());
-		// Add deferredResult to a Queue or a Map...
-		HashTagCQ hashTagCq = null;
+	public @ResponseBody  DeferredResult<List<TweetSummary>> watchHashTag(@PathVariable("target") final String target) {
+		final DeferredResult<List<TweetSummary>> deferredResult = new DeferredResult<List<TweetSummary>>(null, Collections.emptyList());
+		  // Add deferredResult to a Queue or a Map...
+		HashTagCQ hashTagCq=null;
 		List<TweetSummary> results = null;
 		if (hashTaqQueries.containsKey(target)) {
 			hashTagCq = hashTaqQueries.get(target);
 			results = hashTagCq.getEventListener().getTweets();
-		} else {
+		} 
+		else {
 			hashTagCq = new HashTagCQ(hashtags);
 			try {
 				hashTagCq.afterPropertiesSet();
@@ -77,15 +74,15 @@ public class HashTagController {
 			results = hashTagCq.createCQ(target);
 		}
 
-		watchedTweetRequests.put(deferredResult, hashTagCq);
+		watchedTweetRequests.put(deferredResult,hashTagCq);
 
-		deferredResult.onCompletion(new Runnable() {
+		deferredResult.onCompletion(new Runnable(){
 			@Override
 			public void run() {
 				watchedTweetRequests.remove(deferredResult).getEventListener().reset();
 			}
 		});
-
+		
 		if (!results.isEmpty()) {
 			deferredResult.setResult(results);
 		}
