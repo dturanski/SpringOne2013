@@ -14,6 +14,8 @@ NOTE: This project has been updated and moved to the spring-xd-samples repositor
 [Dashboard](https://github.com/tekul/andemo)
 An HTML 5 single page app built with d3.js to view Spring XD metrics and cached data graphically
 
+NOTE: This project has been updated and moved to the spring-xd-samples repository. (https://github.com/spring-projects/spring-xd-samples/tree/master/analytics-dashboard)
+
 <img src="dashboard.png" style="width:400px;"/>
 
 
